@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.platform.mapper.TeacherMapper">
+    <resultMap id="BaseResultMap" type="com.platform.entity.Teacher">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="real_name" jdbcType="VARCHAR" property="realName"/>
+        <result column="team_ids" jdbcType="VARCHAR" property="teamIds"/>
+        <result column="school_id" jdbcType="INTEGER" property="schoolId"/>
+        <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="avatar_path" jdbcType="VARCHAR" property="avatarPath"/>
+    </resultMap>
+    <resultMap id="TeacherVOBaseResultMap" type="com.platform.vo.TeacherVO">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="real_name" property="realName"/>
+        <result column="team_ids" property="teamIds"/>
+        <result column="school_name" property="schoolName"/>
+        <result column="tel" property="tel"/>
+        <result column="avatar_path" property="avatarPath"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from teacher
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.platform.entity.Teacher">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into teacher (username, `password`, real_name,
+        team_ids, school_id, tel,
+        avatar_path)
+        values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR},
+        #{teamIds,jdbcType=VARCHAR}, #{schoolId,jdbcType=INTEGER}, #{tel,jdbcType=VARCHAR},
+        #{avatarPath,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.platform.entity.Teacher">
+        update teacher
+        <set>
+            <if test="username != null">username = #{username,jdbcType=VARCHAR},</if>
+            <if test="password != null">`password` = #{password,jdbcType=VARCHAR},</if>
+            <if test="realName != null">real_name = #{realName,jdbcType=VARCHAR},</if>
+            <if test="teamIds != null">team_ids = #{teamIds,jdbcType=VARCHAR},</if>
+            <if test="schoolId != null">school_id = #{schoolId,jdbcType=INTEGER},</if>
+            <if test="tel != null">tel = #{tel,jdbcType=VARCHAR},</if>
+            <if test="avatarPath != null">avatar_path = #{avatarPath,jdbcType=VARCHAR}</if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select id,
+               username,
+               `password`,
+               real_name,
+               team_ids,
+               school_id,
+               tel,
+               avatar_path
+        from teacher
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id,
+               username,
+               `password`,
+               real_name,
+               team_ids,
+               school_id,
+               tel,
+               avatar_path
+        from teacher
+    </select>
+    <select id="selectByUsername" resultMap="BaseResultMap">
+        select *
+        from teacher
+        where username = #{username}
+    </select>
+
+    <select id="selectPasswordByUsername" resultType="java.lang.String">
+        select password
+        from teacher
+        where username = #{username}
+    </select>
+    <select id="selectTeamIdsById" resultType="java.lang.String" parameterType="java.lang.Integer">
+        select team_ids
+        from teacher
+        where id = #{id}
+    </select>
+
+    <select id="selectTeamIdsByUsername" parameterType="java.lang.String" resultType="java.lang.String">
+        select team_ids
+        from teacher
+        where username = #{username}
+    </select>
+    <select id="selectVOByUsername" resultMap="TeacherVOBaseResultMap" parameterType="java.lang.String">
+        SELECT
+            a.id id,
+            a.username username,
+            a.password password,
+            a.real_name real_name,
+            a.team_ids team_ids,
+            b.name school_name,
+            a.tel tel,
+            a.avatar_path avatar_path
+        FROM
+                ( SELECT * FROM teacher WHERE teacher.id = '1' ) a,
+                ( SELECT * FROM school ) b
+        WHERE
+            a.school_id = b.id
+    </select>
+</mapper>
