@@ -14,6 +14,7 @@ import com.platform.service.AdminService;
 import com.platform.service.StudentService;
 import com.platform.service.TeamService;
 import com.platform.utils.JSONUtil;
+import com.platform.vo.StudentVO;
 import com.platform.vo.TeamInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -97,6 +98,15 @@ public class AdminController extends BaseController {
         return RestResponse.ok(teamsInfoVO);
     }
 
+//    @GetMapping("/api/admin/getTeamById/{id}")
+//    public RestResponse getTeamInfoById(@PathVariable Integer id) {
+//
+//    }
+
+//    @GetMapping("/api/admin/getStudents/{pageNum}/{pageSize}")
+//    public RestResponse getStudents(@PathVariable Integer pageNum,@PathVariable Integer pageSize){
+//        List<StudentVO> studentVOS = studentService.selectVOsLimit(pageNum * pageSize, pageSize);
+//    }
 }
 
 //

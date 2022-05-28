@@ -3,6 +3,7 @@ package com.platform.mapper;
 import com.platform.entity.Student;
 import com.platform.vo.StudentVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,4 +30,6 @@ public interface StudentMapper {
     String selectUsernameByPrimaryKey(Integer id);
 
     String selectRealNameByPrimaryKey(Integer id);
+
+    List<StudentVO> selectVOsLimit(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
 }

@@ -2,6 +2,7 @@ package com.platform.service;
 
 import com.platform.entity.Student;
 import com.platform.vo.StudentVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface StudentService {
     String selectUsernameByPrimaryKey(Integer id);
 
     String selectRealNameByPrimaryKey(Integer id);
+
+    List<StudentVO> selectVOsLimit(Integer startIndex, Integer pageSize);
 }

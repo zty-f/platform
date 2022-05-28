@@ -106,4 +106,20 @@
         from student
         where id = #{id}
     </select>
+
+    <select id="selectVOsLimit" parameterType="java.lang.Integer" resultMap="StudentVOResultMap">
+        SELECT
+            student.id id,
+            student.username,
+            student.PASSWORD,
+            student.real_name real_name,
+            school.`name` school_name,
+            student.team_ids team_ids,
+            student.tel tel,
+            student.avatar_path avatar_path
+        FROM
+            student
+                LEFT JOIN school ON student.school_id = school.id
+            LIMIT #{startIndex},#{pageSize}
+    </select>
 </mapper>

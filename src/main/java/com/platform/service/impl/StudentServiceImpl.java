@@ -69,4 +69,9 @@ public class StudentServiceImpl implements StudentService {
     public String selectRealNameByPrimaryKey(Integer id) {
         return studentMapper.selectRealNameByPrimaryKey(id);
     }
+
+    @Override
+    public List<StudentVO> selectVOsLimit(Integer startIndex, Integer pageSize) {
+        return studentMapper.selectVOsLimit(startIndex, pageSize);
+    }
 }
