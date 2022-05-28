@@ -10,3 +10,5 @@ axios.defaults.baseURL = 'http://localhost:8080'
 const app = createApp(App)
 app.use(ElementUI)
 app.use(store).use(router).mount("#app")
+//!!!!!!!!!!!!!!!!!👇👇👇👇👇👇👇👇👇
+axios.defaults.withCredentials=true

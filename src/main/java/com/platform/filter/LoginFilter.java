@@ -2,9 +2,11 @@ package com.platform.filter;
 
 
 import com.platform.base.ResponseCode;
+import org.springframework.core.annotation.Order;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -13,6 +15,8 @@ import java.util.*;
 /**
  * @author Hchier
  */
+
+@Order(1)
 @WebFilter(urlPatterns = {"/api/*"}, filterName = "LoginFilter")
 public class LoginFilter implements Filter {
 
@@ -39,8 +43,17 @@ public class LoginFilter implements Filter {
                 break;
             }
         }
+//        Cookie[] cookies = httpServletRequest.getCookies();
+//        if (cookies != null) {
+//            for (Cookie cookie : cookies) {
+//                if (cookie.getName().equals("JSESSIONID")) {
+//                    System.out.println("存在JSESSIONIDJSESSIONIDJSESSIONIDJSESSIONIDJSESSIONID");
+//                    System.out.println(cookie.getValue());
+//                }
+//            }
+//        }
         System.out.println("path:  " + path + "   .allowedPath:  " + allowedPath);
-
+        System.out.println("getSession().getAttribute: " + httpServletRequest.getSession().getAttribute("username"));
         if (!allowedPath && httpServletRequest.getSession().getAttribute("username") == null) {
             httpServletResponse.getWriter().println("" +
                     "{\n" +

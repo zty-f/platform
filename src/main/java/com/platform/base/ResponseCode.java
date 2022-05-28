@@ -17,7 +17,8 @@ public enum ResponseCode {
     USER_ALREADY_EXIST(434, "用户已存在"),
     TEAM_ALREADY_EXIST(435, "队伍已存在"),
     ADD_FAIL(436, "新增失败"),
-    SCHOOL_NOT_EXIST(436, "学校不存在");
+    SCHOOL_NOT_EXIST(436, "学校不存在"),
+    IDENTITY_ERROR(437, "身份异常");
 
     int code;
     String message;

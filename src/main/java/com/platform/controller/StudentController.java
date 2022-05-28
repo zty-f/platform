@@ -17,6 +17,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -58,6 +59,8 @@ public class StudentController extends BaseController {
         }
         if (studentService.selectPasswordByUsername(student.getUsername()).equals(student.getPassword())) {
             setCurrentUser(request, Const.ROLE_STUDENT.getMessage(), student.getUsername());
+            String[] currentUser = getCurrentUser(request);
+            System.out.println("currentUser:"+ Arrays.toString(currentUser));
             return RestResponse.ok();
         }
         return RestResponse.fail(ResponseCode.AUTHENTICATION_FAIL.getCode(), ResponseCode.AUTHENTICATION_FAIL.getMessage());
@@ -90,6 +93,7 @@ public class StudentController extends BaseController {
 
     @PostMapping("/api/student/teamsInfo")
     public RestResponse teamsInfo(HttpServletRequest request) throws JsonProcessingException {
+        System.out.println("/api/student/teamsInfo");
         String[] currentUser = getCurrentUser(request);
         String teamIdsJson = studentService.selectTeamIdsByUsername(currentUser[1]);
         List<Integer> teamIdsList = objectMapper.readValue(teamIdsJson, List.class);

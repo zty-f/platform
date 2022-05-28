@@ -1,6 +1,13 @@
 <template>
   <el-card class="box-card" :style="{margin:'auto'}">
 
+    <el-form-item label="角色">
+      <el-select v-model="identification.identification" placeholder="请选择角色">
+        <el-option label="admin" value="admin"/>
+        <el-option label="teacher" value="teacher"/>
+        <el-option label="student" value="student"/>
+      </el-select>
+    </el-form-item>
     <el-form :model="user" label-width="80px" ref="loginFormRef">
       <el-form-item label="用户名" prop="username">
         <el-input v-model="user.username" prefix-icon="el-icon-user" placeholder="请输入用户名"></el-input>
@@ -23,24 +30,34 @@
 import {reactive, ref} from 'vue';
 import axios from "axios";
 import {ElMessage} from 'element-plus';
-import type { FormInstance } from 'element-plus'
+import type {FormInstance} from 'element-plus'
+import router from "@/router";
 
 
 const loginFormRef = ref<FormInstance>()
 
+
+const identification = reactive({
+  identification: '',
+
+})
 
 const user = reactive({
   username: '',
   password: '',
 })
 
-const login = ()=>{
+const login = () => {
   console.log('登录中...');
-  axios.post("/api/student/login", user).then((response) => {
+  let urlPrefix = "/api/" + identification.identification + "/login"
+  axios.post(urlPrefix, user).then((response) => {
     const data = response.data;
+
     if (data.code == 200) {
+
       ElMessage.success("登录成功！");
-      window.location.href = 'Home.vue'
+      // window.location.href = 'Home.vue'
+      router.push({path: '/'})
     } else {
       ElMessage.error(data.message);
     }
