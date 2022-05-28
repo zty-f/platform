@@ -26,7 +26,7 @@ public class CrossOrigin implements Filter {
 
         response.setContentType("text/html;charset=UTF-8");
         // 此处 setHeader、addHeader 方法都可用。但 addHeader时写多个会报错：“...,but only one is allowed”
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8070");
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8081");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type,XFILENAME,XFILECATEGORY,XFILESIZE,request-ajax");
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Max-Age", "3600");
