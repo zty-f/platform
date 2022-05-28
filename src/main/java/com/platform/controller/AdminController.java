@@ -98,15 +98,17 @@ public class AdminController extends BaseController {
         return RestResponse.ok(teamsInfoVO);
     }
 
-//    @GetMapping("/api/admin/getTeamById/{id}")
-//    public RestResponse getTeamInfoById(@PathVariable Integer id) {
-//
-//    }
+    @GetMapping("/api/admin/getTeamById/{id}")
+    public RestResponse getTeamInfoById(@PathVariable Integer id) {
 
-//    @GetMapping("/api/admin/getStudents/{pageNum}/{pageSize}")
-//    public RestResponse getStudents(@PathVariable Integer pageNum,@PathVariable Integer pageSize){
-//        List<StudentVO> studentVOS = studentService.selectVOsLimit(pageNum * pageSize, pageSize);
-//    }
+        return null;
+    }
+
+    @GetMapping("/api/admin/getStudents/{pageNum}/{pageSize}")
+    public RestResponse getStudents(@PathVariable Integer pageNum,@PathVariable Integer pageSize){
+        List<StudentVO> studentVOS = studentService.selectVOsLimit(pageNum * pageSize, pageSize);
+        return null;
+    }
 }
 
 //
