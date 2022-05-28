@@ -44,6 +44,7 @@ public class AdminController extends BaseController {
 
     @PostMapping("/api/admin/add")
     public RestResponse addAdmin(@RequestBody Admin admin) {
+        System.out.println();
         if (adminService.selectByUsername(admin.getUsername()) != null) {
             return RestResponse.fail(ResponseCode.USER_ALREADY_EXIST.getCode(), ResponseCode.USER_ALREADY_EXIST.getMessage());
         }
