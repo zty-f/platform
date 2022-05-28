@@ -101,6 +101,7 @@ public class AdminController extends BaseController {
     @GetMapping("/api/admin/getTeamById/{id}")
     public RestResponse getTeamInfoById(@PathVariable Integer id) {
         System.out.println("test");
+        System.out.println("test1");
         return null;
     }
 
