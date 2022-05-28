@@ -1,5 +1,5 @@
 <template>
-
+  <el-button type="primary" >get-student-teaminfo</el-button>
 </template>
 
 <script>
@@ -12,6 +12,7 @@ export default {
     axios.post("/api/student/teamsInfo").then((response) => {
       const data = response.data;
       if (data.code === 200) {
+        ElMessage.success(data.responseBody.toString());
         console.log(data);
       } else {
         ElMessage.error(data.message);

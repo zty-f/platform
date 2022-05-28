@@ -17,6 +17,7 @@
           <el-menu-item index="/">首页</el-menu-item>
           <el-menu-item index="2">用户管理</el-menu-item>
           <el-menu-item index="3">报名</el-menu-item>
+          <el-menu-item index="/student/teamInfo">Student-Team-Info</el-menu-item>
           <el-menu-item index="/register" :style="{marginLeft:'900px'}">注册</el-menu-item>
           <el-menu-item index="/login" >登录</el-menu-item>
         </el-menu>
