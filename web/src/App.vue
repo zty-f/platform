@@ -14,14 +14,44 @@
           :router = 'true'
         >
           <el-menu-item index="0" disabled>操作中心</el-menu-item>
-          <el-menu-item index="/">首页</el-menu-item>
-          <el-menu-item index="2">用户管理</el-menu-item>
-          <el-menu-item index="3">报名</el-menu-item>
+          <el-menu-item index="/1">首页</el-menu-item>
+          <el-menu-item index="/2">用户管理</el-menu-item>
+          <el-menu-item index="/3">admin</el-menu-item>
+          <el-menu-item index="/4">student</el-menu-item>
           <el-menu-item index="/student/teamInfo">Student-Team-Info</el-menu-item>
-          <el-menu-item index="/register" :style="{marginLeft:'900px'}">注册</el-menu-item>
-          <el-menu-item index="/login" >登录</el-menu-item>
+          <el-menu-item index="/register" :style="{marginLeft:'900px'}" v-show="isShowLoginAndRegister">注册</el-menu-item>
+          <el-menu-item  index="/" @click="isShowLoginForm = true" v-show="isShowLoginAndRegister">登录</el-menu-item>
         </el-menu>
       </el-header>
+
+      <el-dialog title="登录" v-model="isShowLoginForm" :before-close="handleClose">
+        <el-card class="box-card" :style="{margin:'auto'}">
+
+          <el-form-item label="角色">
+            <el-select v-model="identification.identification" placeholder="请选择角色">
+              <el-option label="admin" value="admin"/>
+              <el-option label="teacher" value="teacher"/>
+              <el-option label="student" value="student"/>
+            </el-select>
+          </el-form-item>
+          <el-form :model="user" label-width="80px" ref="loginFormRef">
+            <el-form-item label="用户名" prop="username">
+              <el-input v-model="user.username" prefix-icon="el-icon-user" placeholder="请输入用户名"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+              <el-input v-model="user.password" prefix-icon="el-icon-lock" type="password" placeholder="请输入密码"></el-input>
+            </el-form-item>
+
+
+            <el-form-item>
+              <el-button type="primary" @click="login()">登录</el-button>
+              <el-button type="info" @click="resetForm(loginFormRef)">重置</el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
+      </el-dialog>
+
+
 
       <el-main>
         <router-view></router-view>
@@ -35,26 +65,62 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
+
+import {reactive, ref} from 'vue';
 import axios from "axios";
-import {ElMessage} from "_element-plus@2.2.2@element-plus";
+import {ElMessage, ElMessageBox} from 'element-plus';
+import type {FormInstance} from 'element-plus'
+import router from "@/router";
 
-export default {
-  data() {
-    return {
-      activeIndex2: '1',
-      user:{
-        role:"",
-        username:""
-      }
-    };
-  },
-  methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+
+const loginFormRef = ref<FormInstance>()
+const isShowLoginForm =  ref(false);
+const isShowLoginAndRegister =  ref(true);
+
+const identification = reactive({
+  identification: '',
+
+})
+
+const user = reactive({
+  username: '',
+  password: '',
+})
+
+const login = () => {
+  console.log('登录中...');
+  let urlPrefix = "/api/" + identification.identification + "/login"
+  axios.post(urlPrefix, user).then((response) => {
+    const data = response.data;
+
+    if (data.code == 200) {
+
+      ElMessage.success("登录成功！");
+      // window.location.href = 'Home.vue'
+      isShowLoginForm.value = false;
+      isShowLoginAndRegister.value = false;
+      router.push({path: '/'})
+    } else {
+      ElMessage.error(data.message);
     }
-  },
+  });
+  return
+}
 
+const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.resetFields()
+}
+
+const handleClose = (done: () => void) => {
+  ElMessageBox.confirm('确定关闭登录窗口?')
+    .then(() => {
+      done()
+    })
+    .catch(() => {
+      // catch error
+    })
 }
 </script>
 
@@ -65,5 +131,8 @@ export default {
   text-align: center;
   line-height: 60px;
   padding: 0;
+}
+.box-card {
+  width: 480px;
 }
 </style>

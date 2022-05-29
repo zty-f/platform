@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import axios from "_axios@0.27.2@axios";
-import {ElMessage} from "_element-plus@2.2.2@element-plus";
+import axios from "axios";
+import {ElMessage} from "element-plus";
 
 export default {
   name: "teamInfo",
