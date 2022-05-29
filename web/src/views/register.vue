@@ -12,8 +12,13 @@
         <el-input v-model="user.realName" prefix-icon="el-icon-lock"  placeholder="请输入真实姓名"></el-input>
       </el-form-item>
 
+      <el-form-item label="学校名称">
+        <el-input v-model="school.name" prefix-icon="el-icon-lock"  placeholder="请输入学校名称"></el-input>
+        <el-button type="primary" @click="getSchoolNameById(school.schoolName)">查询学校</el-button>
+      </el-form-item>
+
       <el-form-item label="学校Id" prop="schoolId">
-        <el-input v-model="user.schoolId" prefix-icon="el-icon-lock"  placeholder="请输入学校Id"></el-input>
+        <el-input v-model="user.schoolId" prefix-icon="el-icon-lock"  placeholder="学校Id" disabled ></el-input>
       </el-form-item>
 
 
@@ -40,6 +45,9 @@ import type { FormInstance } from 'element-plus'
 
 const loginFormRef = ref<FormInstance>()
 
+const school=reactive({
+  name:'',
+});
 
 const user = reactive({
     username: '',
@@ -66,6 +74,21 @@ const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.resetFields()
 }
+
+const getSchoolNameById = ()=>{
+  axios.post("/api/school/getIdByName", school).then((response) => {
+    const data = response.data;
+    if (data.code != 200) {
+      ElMessage.error(data.message);
+      user.schoolId="";
+    } else {
+      ElMessage.success("学校id为："+data.responseBody);
+      user.schoolId=data.responseBody;
+    }
+  });
+  return
+}
+
 
 </script>
 

@@ -4,10 +4,7 @@ import com.platform.base.ResponseCode;
 import com.platform.base.RestResponse;
 import com.platform.entity.School;
 import com.platform.service.SchoolService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author by Hchier
@@ -29,5 +26,13 @@ public class SchoolController {
             return RestResponse.fail(ResponseCode.SCHOOL_NOT_EXIST.getCode(), ResponseCode.SCHOOL_NOT_EXIST.getMessage());
         }
         return RestResponse.ok(school);
+    }
+    @PostMapping ("/getIdByName")
+    public RestResponse getIdByName(@RequestBody School school){
+        Integer id = schoolService.selectIdByName(school.getName());
+        if (id==null){
+            return RestResponse.fail(ResponseCode.SCHOOL_NOT_EXIST.getCode(),ResponseCode.SCHOOL_NOT_EXIST.getMessage());
+        }
+        return RestResponse.ok(id);
     }
 }

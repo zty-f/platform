@@ -30,5 +30,8 @@
     select id, `name`
     from school
   </select>
+  <select id="selectIdByName" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select id from school where name=#{name}
+  </select>
 
 </mapper>

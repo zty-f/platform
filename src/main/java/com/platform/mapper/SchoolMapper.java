@@ -22,5 +22,6 @@ public interface SchoolMapper {
 
     int updateByPrimaryKey(School record);
 
+    Integer selectIdByName(String name);
 
 }

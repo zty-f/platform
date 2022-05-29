@@ -18,4 +18,6 @@ public interface SchoolService {
     List<School> selectAll();
 
     int updateByPrimaryKey(School record);
+
+    Integer selectIdByName(String name);
 }

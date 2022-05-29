@@ -21,7 +21,7 @@ import java.util.*;
 public class LoginFilter implements Filter {
 
     private static final Set<String> ALLOWED_PATHS = Collections.unmodifiableSet(new HashSet<>(
-            Arrays.asList("/login", "/register")));
+            Arrays.asList("/login", "/register","/api/school/getIdByName")));
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

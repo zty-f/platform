@@ -43,4 +43,9 @@ public class SchoolServiceImpl implements SchoolService {
     public int updateByPrimaryKey(School record) {
         return schoolMapper.updateByPrimaryKey(record);
     }
+
+    @Override
+    public Integer selectIdByName(String name) {
+        return schoolMapper.selectIdByName(name);
+    }
 }
