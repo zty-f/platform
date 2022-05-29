@@ -36,17 +36,25 @@
 </template>
 
 <script>
+import axios from "axios";
+import {ElMessage} from "_element-plus@2.2.2@element-plus";
+
 export default {
   data() {
     return {
-      activeIndex2: '1'
+      activeIndex2: '1',
+      user:{
+        role:"",
+        username:""
+      }
     };
   },
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     }
-  }
+  },
+
 }
 </script>
 

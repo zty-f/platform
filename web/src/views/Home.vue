@@ -1,16 +1,32 @@
 <template>
-  <div class="home">
-    <h1>Home页面！</h1>
-  </div>
+  {{name}}
 </template>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component'
+<script>
+import axios from "_axios@0.27.2@axios";
+import {ElMessage} from "_element-plus@2.2.2@element-plus";
 
-@Options({
-  components: {
-
+export default {
+  name: "home",
+  data() {
+    return{
+      name:"11",
+    }
+  },
+  created() {
+    axios.get("/getCurrentUser",{withCredentials:true}).then((response) => {
+      const data = response.data;
+      console.log(data);
+      if (data.code === 200) {
+        ElMessage.success("您当前的身份为"+data.responseBody[0]+"，用户名"+data.responseBody[1]);
+      } else {
+        ElMessage.error(data.message);
+      }
+    });
   }
-})
-export default class Home extends Vue {}
+}
 </script>
+
+<style scoped>
+
+</style>
