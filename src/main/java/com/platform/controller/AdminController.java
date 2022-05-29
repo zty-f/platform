@@ -100,16 +100,23 @@ public class AdminController extends BaseController {
 
     @GetMapping("/api/admin/getTeamById/{id}")
     public RestResponse getTeamInfoById(@PathVariable Integer id) {
-        System.out.println("test");
-        System.out.println("test1");
-        return null;
+        TeamInfoMTQO teamInfoVO =  teamService.selectMTQOByPrimary(id);
+
+
+        return RestResponse.ok(teamInfoVO);
+
+
     }
 
     @GetMapping("/api/admin/getStudents/{pageNum}/{pageSize}")
     public RestResponse getStudents(@PathVariable Integer pageNum,@PathVariable Integer pageSize){
         List<StudentVO> studentVOS = studentService.selectVOsLimit(pageNum * pageSize, pageSize);
         return null;
+
+
     }
+
+
 }
 
 //

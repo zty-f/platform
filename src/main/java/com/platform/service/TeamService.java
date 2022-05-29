@@ -31,4 +31,6 @@ public interface TeamService {
 
     List<TeamInfoMTQO> selectMTQOByPrimaryLimit( Integer startIndex, Integer pageSize);
 
+
+
 }

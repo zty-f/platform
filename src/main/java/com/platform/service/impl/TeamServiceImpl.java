@@ -70,4 +70,5 @@ public class TeamServiceImpl implements TeamService {
         return teamMapper.selectMTQOByPrimaryLimit(startIndex, pageSize);
     }
 
+
 }
