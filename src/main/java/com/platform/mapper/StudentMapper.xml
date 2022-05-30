@@ -122,4 +122,7 @@
                 LEFT JOIN school ON student.school_id = school.id
             LIMIT #{startIndex},#{pageSize}
     </select>
+    <select id="selectStudentsByIds" resultType="com.platform.entity.Student">
+        SELECT * FROM student WHERE id IN ${ids}
+    </select>
 </mapper>

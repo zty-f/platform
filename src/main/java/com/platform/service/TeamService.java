@@ -2,6 +2,7 @@ package com.platform.service;
 
 import com.platform.entity.Team;
 import com.platform.mtqo.TeamInfoMTQO;
+import com.platform.vo.TeamAllInfoVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -32,5 +33,5 @@ public interface TeamService {
     List<TeamInfoMTQO> selectMTQOByPrimaryLimit( Integer startIndex, Integer pageSize);
 
 
-
+    List<TeamAllInfoVO> getTeamByProjectId(Integer id);
 }

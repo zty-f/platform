@@ -32,4 +32,6 @@ public interface StudentMapper {
     String selectRealNameByPrimaryKey(Integer id);
 
     List<StudentVO> selectVOsLimit(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+
+    List<Student> selectStudentsByIds( String ids);
 }
