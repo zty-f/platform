@@ -17,6 +17,7 @@ import com.platform.utils.JSONUtil;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -40,14 +41,33 @@ public class TeamController extends BaseController {
         this.teacherService = teacherService;
     }
 
+    @Transactional
     @PostMapping("/add")
-    public RestResponse add(@RequestBody TeamDTO teamDTO) throws JsonProcessingException {
+    public RestResponse add(@RequestBody TeamDTO teamDTO, HttpServletRequest request) throws JsonProcessingException {
         if (teamService.selectByName(teamDTO.getName()) != null) {
             return RestResponse.fail(ResponseCode.TEAM_ALREADY_EXIST.getCode(), ResponseCode.TEAM_ALREADY_EXIST.getMessage());
         }
+        String[] currentUser = getCurrentUser(request);
         Team team = MODEL_MAPPER.map(teamDTO, Team.class);
-        team.setMemberIds(objectMapper.writeValueAsString(teamDTO.getMemberList()));
-        teamService.insert(team);
+        team.setMemberIds(objectMapper.writeValueAsString(teamDTO.getMemberList())).setLeaderId(currentUser[2]);
+        int insert = teamService.insert(team);
+        if (insert == 0) {
+            return RestResponse.fail(ResponseCode.ADD_FAIL.getCode(), ResponseCode.ADD_FAIL.getMessage());
+        }
+        for (Integer id : teamDTO.getMemberList()) {
+            String teamIdsStr = studentService.selectTeamIdsByUsername(studentService.selectUsernameByPrimaryKey(id));
+            teamIdsStr = jsonUtil.jsonArrayAdd(teamIdsStr, team.getId());
+            int update = studentService.updateByPrimaryKey(new Student().setId(id).setTeamIds(teamIdsStr));
+            if (update == 0) {
+                return RestResponse.fail(ResponseCode.ADD_FAIL.getCode(), ResponseCode.ADD_FAIL.getMessage());
+            }
+        }
+        String teamIdsStr = teacherService.selectTeamIdsById(teamDTO.getTeacherId());
+        teamIdsStr = jsonUtil.jsonArrayAdd(teamIdsStr, team.getId());
+        Teacher teacher = new Teacher().setId(teamDTO.getTeacherId()).setTeamIds(teamIdsStr);
+        if (teacherService.updateByPrimaryKey(teacher) == 0) {
+            return RestResponse.fail(ResponseCode.ADD_FAIL.getCode(), ResponseCode.ADD_FAIL.getMessage());
+        }
         return RestResponse.ok();
     }
 

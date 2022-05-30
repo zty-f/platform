@@ -64,7 +64,7 @@ public class AdminController extends BaseController {
             return RestResponse.fail(ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
         }
         if (adminSelected.getPassword().equals(admin.getPassword())) {
-            setCurrentUser(request, Const.ROLE_ADMIN.getMessage(), admin.getUsername());
+            setCurrentUser(request, Const.ROLE_ADMIN.getMessage(), admin.getUsername(),adminSelected.getId());
             return RestResponse.ok();
         }
         return RestResponse.fail(ResponseCode.AUTHENTICATION_FAIL.getCode(), ResponseCode.AUTHENTICATION_FAIL.getMessage());

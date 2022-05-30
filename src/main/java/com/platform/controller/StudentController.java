@@ -53,12 +53,12 @@ public class StudentController extends BaseController {
     public RestResponse studentLogin(@RequestBody Student student, HttpServletRequest request) {
         System.out.println("haha");
 
-        String password = studentService.selectPasswordByUsername(student.getUsername());
-        if (password == null) {
+        StudentVO studentVO = studentService.selectVOByUsername(student.getUsername());
+        if (studentVO == null) {
             return RestResponse.fail(ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
         }
         if (studentService.selectPasswordByUsername(student.getUsername()).equals(student.getPassword())) {
-            setCurrentUser(request, Const.ROLE_STUDENT.getMessage(), student.getUsername());
+            setCurrentUser(request, Const.ROLE_STUDENT.getMessage(), student.getUsername(),studentVO.getId());
             String[] currentUser = getCurrentUser(request);
             System.out.println("currentUser:"+ Arrays.toString(currentUser));
             return RestResponse.ok();
