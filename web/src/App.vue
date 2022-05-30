@@ -11,16 +11,19 @@
           text-color="#fff"
           active-text-color="#ffd04b"
           @select="x"
-          :router = 'true'
+          :router='true'
         >
           <el-menu-item index="0" disabled>操作中心</el-menu-item>
-          <el-menu-item index="/1">首页</el-menu-item>
+          <el-menu-item index="/">首页</el-menu-item>
           <el-menu-item index="/2">用户管理</el-menu-item>
           <el-menu-item index="/3">admin</el-menu-item>
           <el-menu-item index="/4">student</el-menu-item>
           <el-menu-item index="/student/teamInfo">Student-Team-Info</el-menu-item>
-          <el-menu-item index="/register" :style="{marginLeft:'900px'}" v-show="isShowLoginAndRegister">注册</el-menu-item>
-          <el-menu-item  index="/" @click="isShowLoginForm = true" v-show="isShowLoginAndRegister">登录</el-menu-item>
+          <el-menu-item index="/register" :style="{marginLeft:'900px'}" v-show="isShowLoginAndRegister">注册
+          </el-menu-item>
+          <el-menu-item index="/" @click="isShowLoginForm = true" v-show="isShowLoginAndRegister">登录</el-menu-item>
+          <el-menu-item index="/" :style="{marginLeft:'900px'}" v-show="isShowLogOut" @click="logout()">退出登录
+          </el-menu-item>
         </el-menu>
       </el-header>
 
@@ -39,7 +42,8 @@
               <el-input v-model="user.username" prefix-icon="el-icon-user" placeholder="请输入用户名"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password">
-              <el-input v-model="user.password" prefix-icon="el-icon-lock" type="password" placeholder="请输入密码"></el-input>
+              <el-input v-model="user.password" prefix-icon="el-icon-lock" type="password"
+                        placeholder="请输入密码"></el-input>
             </el-form-item>
 
 
@@ -50,7 +54,6 @@
           </el-form>
         </el-card>
       </el-dialog>
-
 
 
       <el-main>
@@ -72,11 +75,12 @@ import axios from "axios";
 import {ElMessage, ElMessageBox} from 'element-plus';
 import type {FormInstance} from 'element-plus'
 import router from "@/router";
-
+import {Component, Vue} from 'vue-property-decorator'
 
 const loginFormRef = ref<FormInstance>()
-const isShowLoginForm =  ref(false);
-const isShowLoginAndRegister =  ref(true);
+const isShowLoginForm = ref(false);
+const isShowLoginAndRegister = ref(true);
+const isShowLogOut = ref(false);
 
 const identification = reactive({
   identification: '',
@@ -87,6 +91,24 @@ const user = reactive({
   username: '',
   password: '',
 })
+
+
+const created = () => {
+  axios.get("/getCurrentUser", {withCredentials: true}).then((response) => {
+    const data = response.data;
+    console.log(111);
+    if (data.code === 200) {
+      isShowLoginAndRegister.value = false;
+      isShowLogOut.value = true;
+    } else {
+      isShowLoginAndRegister.value = true;
+      isShowLogOut.value = false;
+      ElMessage.error(data.message);
+    }
+  });
+}
+
+created();
 
 const login = () => {
   console.log('登录中...');
@@ -100,11 +122,19 @@ const login = () => {
       // window.location.href = 'Home.vue'
       isShowLoginForm.value = false;
       isShowLoginAndRegister.value = false;
+      isShowLogOut.value = true;
       router.push({path: '/'})
     } else {
       ElMessage.error(data.message);
     }
   });
+  return
+}
+
+const logout = () => {
+  console.log('退出登录中...');
+  isShowLoginAndRegister.value = true;
+  isShowLogOut.value = false;
   return
 }
 
@@ -132,6 +162,7 @@ const handleClose = (done: () => void) => {
   line-height: 60px;
   padding: 0;
 }
+
 .box-card {
   width: 480px;
 }

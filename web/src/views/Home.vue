@@ -10,7 +10,7 @@ export default {
   name: "home",
   data() {
     return{
-      name:"11",
+      name:"index",
     }
   },
   created() {
