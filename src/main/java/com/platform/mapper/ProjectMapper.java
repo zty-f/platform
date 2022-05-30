@@ -22,4 +22,7 @@ public interface ProjectMapper {
 
 
     List<Team> getTeamInfoByProjectId(Integer id);
+
+
+    String selectNameById(Integer id);
 }

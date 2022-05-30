@@ -35,4 +35,7 @@
     <select id="getTeamInfoByProjectId" resultType="com.platform.entity.Team">
       select * from team where project_id = #{id}
     </select>
+    <select id="selectNameById" resultType="java.lang.String">
+      select title from project where id = #{id}
+    </select>
 </mapper>

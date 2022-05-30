@@ -43,4 +43,10 @@ public class ProjectServiceImpl implements ProjectService {
     public int updateByPrimaryKey(Project record) {
         return projectMapper.updateByPrimaryKey(record);
     }
+
+    @Override
+    public String selectNameById(Integer id) {
+        String name= projectMapper.selectNameById(id);
+        return name;
+    }
 }

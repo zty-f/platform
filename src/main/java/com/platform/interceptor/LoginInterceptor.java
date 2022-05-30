@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 public class LoginInterceptor implements HandlerInterceptor {
 
@@ -32,7 +33,9 @@ public class LoginInterceptor implements HandlerInterceptor {
         String token = (String)httpSession.getAttribute("username");
         if (token==null ){
             // 未登录跳转到登录界面
+            response.getWriter().write("未登录");
             throw  new RuntimeException("no login!");
+
         } else {
             return true;
         }
@@ -49,4 +52,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
         System.out.println("afterCompletion....");
     }
+
+
+
 }

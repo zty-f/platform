@@ -18,4 +18,6 @@ public interface ProjectService {
     List<Project> selectAll();
 
     int updateByPrimaryKey(Project record);
+
+    String selectNameById(Integer id);
 }
