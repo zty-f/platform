@@ -133,4 +133,11 @@
             , #{pageSize}
     </select>
 
+
+    <select id="getTeamByProjectId" resultType="com.platform.vo.TeamAllInfoVO">
+
+
+
+    </select>
+
 </mapper>

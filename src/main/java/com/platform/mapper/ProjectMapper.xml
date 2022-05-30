@@ -32,4 +32,7 @@
     select id, title, description
     from project
   </select>
+    <select id="getTeamInfoByProjectId" resultType="com.platform.entity.Team">
+      select * from team where project_id = #{id}
+    </select>
 </mapper>

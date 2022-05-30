@@ -15,6 +15,7 @@ import com.platform.service.StudentService;
 import com.platform.service.TeamService;
 import com.platform.utils.JSONUtil;
 import com.platform.vo.StudentVO;
+import com.platform.vo.TeamAllInfoVO;
 import com.platform.vo.TeamInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -101,17 +102,28 @@ public class AdminController extends BaseController {
     @GetMapping("/api/admin/getTeamById/{id}")
     public RestResponse getTeamInfoById(@PathVariable Integer id) {
         TeamInfoMTQO teamInfoVO =  teamService.selectMTQOByPrimary(id);
-
         return RestResponse.ok(teamInfoVO);
-
     }
 
     @GetMapping("/api/admin/getStudents/{pageNum}/{pageSize}")
     public RestResponse getStudents(@PathVariable Integer pageNum,@PathVariable Integer pageSize){
         List<StudentVO> studentVOS = studentService.selectVOsLimit(pageNum * pageSize, pageSize);
-
         return RestResponse.ok(studentVOS);
+    }
 
+
+    /**
+     * 根据ProjectId查询有关队伍的全部信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/api/admin/getTeamByProjectId/{id}")
+    public RestResponse getTeamByProjectId(@PathVariable Integer id){
+
+        List<TeamAllInfoVO> list = teamService.getTeamByProjectId(id);
+
+
+        return RestResponse.ok(list);
     }
 
 

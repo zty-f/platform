@@ -15,21 +15,13 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class Teacher implements Serializable {
     private Integer id;
-
     private String username;
-
     private String password;
-
     private String realName;
-
     private String teamIds;
-
     private Integer schoolId;
-
     private String tel;
-
     private String avatarPath;
-
     private static final long serialVersionUID = 1L;
 
 

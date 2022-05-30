@@ -1,6 +1,7 @@
 package com.platform.mapper;
 
 import com.platform.entity.Project;
+import com.platform.entity.Team;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,7 @@ public interface ProjectMapper {
     List<Project> selectAll();
 
     int updateByPrimaryKey(Project record);
+
+
+    List<Team> getTeamInfoByProjectId(Integer id);
 }
