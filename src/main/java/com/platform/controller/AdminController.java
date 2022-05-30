@@ -71,6 +71,12 @@ public class AdminController extends BaseController {
         return RestResponse.fail(ResponseCode.AUTHENTICATION_FAIL.getCode(), ResponseCode.AUTHENTICATION_FAIL.getMessage());
     }
 
+    @PostMapping("/api/admin/logout")
+    public RestResponse adminLogout(HttpServletRequest request){
+        removeCurrentUser(request);
+        return RestResponse.ok();
+    }
+
     @GetMapping("/api/admin/allAdmins")
     public RestResponse getAllAdmin() {
         List<Admin> admins = adminService.selectAll();
