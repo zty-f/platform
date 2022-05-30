@@ -17,9 +17,14 @@
           <el-menu-item index="/">首页</el-menu-item>
           <!--          <el-menu-item index="/2">用户管理</el-menu-item>-->
           <!--          <el-menu-item index="/"></el-menu-item>-->
-          <el-menu-item index="/team" v-show="identification.identification==='admin'">admin</el-menu-item>
-          <el-menu-item index="/teamInfo" v-show="identification.identification!==''">队伍信息</el-menu-item>
-          <el-menu-item index="/createTeam" v-show="identification.identification!==''">创建队伍</el-menu-item>
+          <el-menu-item index="/teamInfo"
+                        v-show="identification.identification!=='' && identification.identification!=='admin'">队伍信息
+          </el-menu-item>
+          <el-menu-item index="/createTeam"
+                        v-show="identification.identification!==''&&identification.identification!=='admin'">创建队伍
+          </el-menu-item>
+          <el-menu-item index="/admin/teamInfo" v-show="identification.identification==='admin'">admin队伍信息
+          </el-menu-item>
           <el-menu-item index="/register" :style="{marginLeft:'900px'}" v-show="isShowLoginAndRegister">注册
           </el-menu-item>
           <el-menu-item index="/" @click="isShowLoginForm = true" v-show="isShowLoginAndRegister">登录</el-menu-item>
