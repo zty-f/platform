@@ -15,10 +15,11 @@
         >
           <el-menu-item index="0" disabled>操作中心</el-menu-item>
           <el-menu-item index="/">首页</el-menu-item>
-          <el-menu-item index="/2">用户管理</el-menu-item>
-          <el-menu-item index="/3">admin</el-menu-item>
-          <el-menu-item index="/4">student</el-menu-item>
-          <el-menu-item index="/student/teamInfo">Student-Team-Info</el-menu-item>
+          <!--          <el-menu-item index="/2">用户管理</el-menu-item>-->
+          <!--          <el-menu-item index="/"></el-menu-item>-->
+          <el-menu-item index="/team" v-show="identification.identification==='admin'">admin</el-menu-item>
+          <el-menu-item index="/teamInfo" v-show="identification.identification!==''">队伍信息</el-menu-item>
+          <el-menu-item index="/createTeam" v-show="identification.identification!==''">创建队伍</el-menu-item>
           <el-menu-item index="/register" :style="{marginLeft:'900px'}" v-show="isShowLoginAndRegister">注册
           </el-menu-item>
           <el-menu-item index="/" @click="isShowLoginForm = true" v-show="isShowLoginAndRegister">登录</el-menu-item>
@@ -30,14 +31,15 @@
       <el-dialog title="登录" v-model="isShowLoginForm" :before-close="handleClose">
         <el-card class="box-card" :style="{margin:'auto'}">
 
-          <el-form-item label="角色">
-            <el-select v-model="identification.identification" placeholder="请选择角色">
-              <el-option label="admin" value="admin"/>
-              <el-option label="teacher" value="teacher"/>
-              <el-option label="student" value="student"/>
-            </el-select>
-          </el-form-item>
+
           <el-form :model="user" label-width="80px" ref="loginFormRef">
+            <el-form-item label="角色">
+              <el-select v-model="identification.identification" placeholder="请选择角色">
+                <el-option label="admin" value="admin"/>
+                <el-option label="teacher" value="teacher"/>
+                <el-option label="student" value="student"/>
+              </el-select>
+            </el-form-item>
             <el-form-item label="用户名" prop="username">
               <el-input v-model="user.username" prefix-icon="el-icon-user" placeholder="请输入用户名"></el-input>
             </el-form-item>
@@ -125,6 +127,7 @@ const login = () => {
       isShowLogOut.value = true;
       router.push({path: '/'})
     } else {
+      identification.identification = "";
       ElMessage.error(data.message);
     }
   });
@@ -133,8 +136,23 @@ const login = () => {
 
 const logout = () => {
   console.log('退出登录中...');
-  isShowLoginAndRegister.value = true;
-  isShowLogOut.value = false;
+
+
+  let urlPrefix = "/api/" + identification.identification + "/logout"
+  axios.post(urlPrefix, user).then((response) => {
+    const data = response.data;
+    isShowLoginAndRegister.value = true;
+    isShowLogOut.value = false;
+    router.push({path: '/'})
+    identification.identification = "";
+    if (data.code == 200) {
+      ElMessage.success("退出登录！");
+      // window.location.href = 'Home.vue'
+
+    } else {
+      ElMessage.error(data.message);
+    }
+  });
   return
 }
 

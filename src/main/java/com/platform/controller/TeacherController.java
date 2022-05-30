@@ -55,12 +55,12 @@ public class TeacherController extends BaseController {
 
     @PostMapping("/api/teacher/login")
     public RestResponse teacherLogin(@RequestBody Teacher teacher, HttpServletRequest request) {
-        String password = teacherService.selectPasswordByUsername(teacher.getUsername());
-        if (password == null) {
+        Teacher teacherSelected = teacherService.selectByUsername(teacher.getUsername());
+        if (teacherSelected == null) {
             return RestResponse.fail(ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
         }
-        if (password.equals(teacher.getPassword())) {
-            setCurrentUser(request, Const.ROLE_TEACHER.getMessage(), teacher.getUsername());
+        if (teacherSelected.getPassword().equals(teacher.getPassword())) {
+            setCurrentUser(request, Const.ROLE_TEACHER.getMessage(), teacher.getUsername(), teacherSelected.getId());
             return RestResponse.ok();
         }
         return RestResponse.fail(ResponseCode.AUTHENTICATION_FAIL.getCode(), ResponseCode.AUTHENTICATION_FAIL.getMessage());
@@ -76,6 +76,9 @@ public class TeacherController extends BaseController {
     public RestResponse getByUsername(@PathVariable String username, HttpServletRequest request) {
         String[] currentUser = getCurrentUser(request);
         Teacher teacher = teacherService.selectByUsername(username);
+        if (teacher == null) {
+            return RestResponse.fail(ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
+        }
         TeacherVO teacherVO = MODEL_MAPPER.map(teacher, TeacherVO.class);
         teacherVO.setSchoolName(schoolService.selectByPrimaryKey(teacher.getSchoolId()).getName());
         if (Const.ROLE_TEACHER.getMessage().equals(currentUser[0]) && username.equals(currentUser[1])) {
@@ -104,7 +107,6 @@ public class TeacherController extends BaseController {
         }
         return RestResponse.ok(teamsInfoVO);
     }
-
 
 
 }
