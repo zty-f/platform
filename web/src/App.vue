@@ -21,7 +21,7 @@
                         v-show="identification.identification!=='' && identification.identification!=='admin'">队伍信息
           </el-menu-item>
           <el-menu-item index="/createTeam"
-                        v-show="identification.identification!==''&&identification.identification!=='admin'">创建队伍
+                        v-show="identification.identification!==''&&identification.identification==='student'">创建队伍
           </el-menu-item>
           <el-menu-item index="/admin/teamInfo" v-show="identification.identification==='admin'">admin队伍信息
           </el-menu-item>
@@ -103,10 +103,13 @@ const user = reactive({
 const created = () => {
   axios.get("/getCurrentUser", {withCredentials: true}).then((response) => {
     const data = response.data;
-    console.log(111);
+    console.log(data);
+    console.log("app.vue created:"+data.responseBody[0]);
     if (data.code === 200) {
       isShowLoginAndRegister.value = false;
       isShowLogOut.value = true;
+      identification.identification = data.responseBody[0];
+      console.log("created:" + identification.identification);
     } else {
       isShowLoginAndRegister.value = true;
       isShowLogOut.value = false;
@@ -131,6 +134,7 @@ const login = () => {
       isShowLoginAndRegister.value = false;
       isShowLogOut.value = true;
       router.push({path: '/'})
+
     } else {
       identification.identification = "";
       ElMessage.error(data.message);

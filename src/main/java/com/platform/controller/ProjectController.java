@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author zyk
  */
@@ -36,5 +38,13 @@ public class ProjectController extends BaseController {
             return RestResponse.fail(ResponseCode.PROJECT_NOT_EXIST.getCode(), ResponseCode.PROJECT_NOT_EXIST.getMessage());
         }
         return RestResponse.ok(project);
+    }
+    @GetMapping("/api/project/selectAll")
+    public RestResponse selectAll(){
+        List<Project> projectList = projectService.selectAll();
+        if (projectList == null) {
+            return RestResponse.fail(ResponseCode.PROJECT_NOT_EXIST.getCode(), ResponseCode.PROJECT_NOT_EXIST.getMessage());
+        }
+        return RestResponse.ok(projectList);
     }
 }
