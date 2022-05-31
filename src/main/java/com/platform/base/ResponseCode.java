@@ -18,7 +18,8 @@ public enum ResponseCode {
     TEAM_ALREADY_EXIST(435, "队伍已存在"),
     ADD_FAIL(436, "新增失败"),
     SCHOOL_NOT_EXIST(436, "学校不存在"),
-    IDENTITY_ERROR(437, "身份异常");
+    IDENTITY_ERROR(437, "身份异常"),
+    PROJECT_NOT_EXIST(438,"项目不存在");
 
     int code;
     String message;
@@ -26,6 +27,14 @@ public enum ResponseCode {
     ResponseCode(int code, String message) {
         this.code = code;
         this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return "ResponseCode{" +
+                "code=" + code +
+                ", message='" + message + '\'' +
+                '}';
     }
 
     public int getCode() {

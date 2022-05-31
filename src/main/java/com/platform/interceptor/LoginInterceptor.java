@@ -1,6 +1,9 @@
 package com.platform.interceptor;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.platform.base.ResponseCode;
+import com.platform.base.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -11,16 +14,23 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * @author zyk
+ */
 public class LoginInterceptor implements HandlerInterceptor {
 
     @Autowired
     private HttpSession httpSession;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     //Controller逻辑执行之前
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         System.out.println("preHandle....");
         String uri = request.getRequestURI();
-        System.out.println("当前路径"+uri);
+        System.out.println("当前路径" + uri);
 
         /**
          * HandlerMethod=>Controller中标注@RequestMapping的方法
@@ -30,11 +40,14 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        String token = (String)httpSession.getAttribute("username");
-        if (token==null ){
+        String token = (String) httpSession.getAttribute("username");
+        if (token == null) {
             // 未登录跳转到登录界面
-            response.getWriter().write("未登录");
-            throw  new RuntimeException("no login!");
+            response.getWriter().write(objectMapper.writeValueAsString(
+                    RestResponse.fail(
+                            ResponseCode.NOT_LOGGED_IN.getCode(),
+                            ResponseCode.NOT_LOGGED_IN.getMessage())));
+            throw new RuntimeException("no login!");
 
         } else {
             return true;
@@ -52,7 +65,6 @@ public class LoginInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
         System.out.println("afterCompletion....");
     }
-
 
 
 }
