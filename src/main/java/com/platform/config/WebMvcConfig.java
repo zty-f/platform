@@ -16,9 +16,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 // 那些路径不拦截
                 .excludePathPatterns(
-                        "/api/admin/login","/api/student/login","/api/teacher/login",
-                        "/api/admin/add","/api/student/register","/api/team/add",
-                        "/api/school/getIdByName","/getCurrentUser");
+                        "/api/admin/login",
+                        "/api/student/login",
+                        "/api/teacher/login",
+                        "/api/admin/add",
+                        "/api/student/register",
+                        "/api/team/add",
+                        "/api/school/getIdByName",
+                        "/getCurrentUser",
+                        "/api/project/selectAll"
+                );
     }
 
     @Bean

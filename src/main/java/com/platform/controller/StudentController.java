@@ -58,9 +58,9 @@ public class StudentController extends BaseController {
             return RestResponse.fail(ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
         }
         if (studentService.selectPasswordByUsername(student.getUsername()).equals(student.getPassword())) {
-            setCurrentUser(request, Const.ROLE_STUDENT.getMessage(), student.getUsername(),studentVO.getId());
+            setCurrentUser(request, Const.ROLE_STUDENT.getMessage(), student.getUsername(), studentVO.getId());
             String[] currentUser = getCurrentUser(request);
-            System.out.println("currentUser:"+ Arrays.toString(currentUser));
+            System.out.println("currentUser:" + Arrays.toString(currentUser));
             return RestResponse.ok();
         }
         return RestResponse.fail(ResponseCode.AUTHENTICATION_FAIL.getCode(), ResponseCode.AUTHENTICATION_FAIL.getMessage());
@@ -112,5 +112,18 @@ public class StudentController extends BaseController {
         return RestResponse.ok(teamsInfoVO);
     }
 
+    @GetMapping("/api/student/teamInfoById/{id}")
+    public RestResponse teamsInfoById(@PathVariable Integer id, HttpServletRequest request) throws JsonProcessingException {
+        String[] currentUser = getCurrentUser(request);
+        TeamInfoMTQO teamInfoMTQO = teamService.selectMTQOByPrimary(id);
+        TeamInfoVO teamInfoVO = MODEL_MAPPER.map(teamInfoMTQO, TeamInfoVO.class);
+        teamInfoVO.setIsLeader(teamInfoVO.getLeaderUsername().equals(currentUser[1]));
+        List<Integer> memberIdList = objectMapper.readValue(teamInfoMTQO.getMemberIds(), List.class);
+        teamInfoVO.setMemberList(new LinkedList<>());
+        for (Integer studentId : memberIdList) {
+            teamInfoVO.getMemberList().add(new String[]{String.valueOf(studentId), studentService.selectRealNameByPrimaryKey(studentId)});
+        }
+        return RestResponse.ok(new LinkedList(){{push(teamInfoVO);}});
+    }
 
 }

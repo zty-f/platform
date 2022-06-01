@@ -1,51 +1,62 @@
 <template>
-  <el-table :data="tableData" style="width: 100%">
-    <el-table-column prop="id" label="队伍id" width="180"/>
-    <el-table-column prop="name" label="队伍name" width="180"/>
-    <el-table-column prop="memberList" label="成员"/>
-    <el-table-column prop="projectName" label="所选项目"/>
-    <el-table-column prop="leaderRealName" label="队长"/>
-    <el-table-column prop="isLeader" label="您是否为队长"/>
-    <el-table-column prop="committed" label="提交状态"/>
-    <el-table-column prop="teacherName" label="辅导老师"/>
-    <el-table-column prop="projectPath" label="项目地址"/>
+  <el-table v-bind:data="tableData.list" style="width: 100%" @row-dblclick="ToUpdateTeamInfo">
+    <el-table-column prop="id" label="id" width="150"/>
+    <el-table-column prop="name" label="name" width="120"/>
+    <el-table-column prop="isLeader" label="isLeader" width="120"/>
+    <el-table-column prop="memberList" label="memberList" width="120"/>
+    <el-table-column prop="projectName" label="projectName" width="120"/>
+    <el-table-column prop="leaderRealName" label="leaderRealName" width="120"/>
+    <el-table-column prop="committed" label="committed" width="120"/>
+    <el-table-column prop="teacherName" label="teacherName" width="120"/>
+    <el-table-column prop="projectPath" label="projectPath" width="120"/>
   </el-table>
 </template>
 
 <script lang="ts" setup>
 import axios from "axios";
 import {ElMessage} from "element-plus";
-import router from "@/router";
-import {reactive} from "vue";
 
-const tableData = reactive([
-  {
-    id: '',
-    name: '',
-    isLeader: '',
-    memberList: '',
-    projectName: '',
-    leaderRealName: '',
-    committed: '',
-    teacherName: '',
-    projectPath: '',
-  }
-])
+import {reactive} from "vue";
+import {useRouter} from 'vue-router'
+
+const router = useRouter()
+
+
+const tableData = reactive<{
+  list: Item[]
+}>({
+  list: []
+})
+
 
 const user = reactive({
   identification: '',
   username: '',
-  id:'',
+  id: '',
 })
 
-const writeDataIntoTable = (data) => {
+interface Item {
+  id: string
+  name: string
+  isLeader: boolean
+  memberList: string
+  projectName: string
+  leaderRealName: string
+  committed: string
+  teacherName: string
+  projectPath: string
+}
+
+const writeDataIntoTable = (data: string | any[]) => {
   for (let i = 0; i < data.length; i++) {
-    let memberList='';
-    for(let j=0;j<data[i].memberList.length;j++){
-      memberList+=data[i].memberList[j][1];
-      memberList+='  ';
+    let memberList = '';
+    for (let j = 0; j < data[i].memberList.length; j++) {
+      memberList += data[i].memberList[j][0];
+      memberList += '  ';
+      memberList += data[i].memberList[j][1];
+      memberList += '，';
     }
-    tableData.push({
+    tableData.list.push({
       id: data[i].id, name: data[i].name, isLeader: data[i].isLeader, memberList: memberList,
       projectName: data[i].projectName, leaderRealName: data[i].leaderRealName, committed: data[i].committed,
       teacherName: data[i].teacherName, projectPath: data[i].projectPath
@@ -80,6 +91,18 @@ const created = () => {
   return
 }
 
+const ToUpdateTeamInfo = (row: Item) => {
+  if (row.isLeader) {
+    router.push({
+      name: "updateTeamInfo",
+      // query: {
+      //   p1: 1
+      // }
+    });
+  } else {
+    alert("无权限");
+  }
+}
 created();
 
 </script>

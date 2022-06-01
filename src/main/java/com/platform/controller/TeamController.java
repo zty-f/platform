@@ -109,7 +109,7 @@ public class TeamController extends BaseController {
 
 
     @Transactional
-    @GetMapping("/updateTeacher/{teamId}/{newTeacherId}//{oldTeacherId}")
+    @GetMapping("/updateTeacher/{teamId}/{newTeacherId}/{oldTeacherId}")
     public RestResponse updateTeacher(@PathVariable Integer teamId, @PathVariable Integer newTeacherId, @PathVariable Integer oldTeacherId) throws JsonProcessingException {
         Team team = new Team().setId(teamId).setTeacherId(newTeacherId);
 
@@ -127,4 +127,6 @@ public class TeamController extends BaseController {
         }
         return RestResponse.fail(ResponseCode.ADD_FAIL.getCode(), ResponseCode.ADD_FAIL.getMessage());
     }
+
+
 }

@@ -6,6 +6,7 @@ import studentTeamInfo from '../views/student/teamInfo.vue'
 import teacherTeamInfo from '../views/student/teamInfo.vue'
 import adminTeamInfo from '../views/admin/teamInfo.vue'
 import teamInfo from '../views/teamInfo.vue'
+import updateTeamInfo from '../views/updateTeamInfo.vue'
 import createTeam from '../views/createTeam.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -43,6 +44,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/createTeam',
     name: 'createTeam',
     component: createTeam
+  },
+  {
+    path: '/updateTeamInfo',
+    name: 'updateTeamInfo',
+    component: updateTeamInfo
   }
 ]
 
