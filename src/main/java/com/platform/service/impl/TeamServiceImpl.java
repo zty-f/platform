@@ -76,6 +76,11 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    public List<TeamInfoMTQO> selectMTQOQuery(TeamInfoMTQO teamInfoMTQO) {
+        return teamMapper.selectMTQOQuery(teamInfoMTQO);
+    }
+
+    @Override
     public String selectMemberIdsByPrimaryKey(Integer id) {
         return teamMapper.selectMemberIdsByPrimaryKey(id);
     }

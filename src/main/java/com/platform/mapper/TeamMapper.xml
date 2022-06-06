@@ -140,4 +140,45 @@
 
     </select>
 
+    <select id="selectMTQOQuery" resultMap="TeamInfoMTQOBaseResultMap" parameterType="com.platform.mtqo.TeamInfoMTQO">
+        SELECT
+            *
+        FROM
+            (
+                SELECT
+                    a.id id,
+                    a.NAME NAME,
+                    a.member_ids member_ids,
+                    d.title project_name,
+                    b.id leader_id,
+                    b.username leader_username,
+                    b.real_name leader_real_name,
+                    a.COMMITTED COMMITTED,
+                    c.id teacher_id,
+                    c.real_name teacher_name,
+                    a.project_path project_path
+                FROM
+                        ( SELECT * FROM team ) a,
+                        ( SELECT id, username, real_name FROM student ) b,
+                        ( SELECT id, real_name FROM teacher ) c,
+                        ( SELECT id, title FROM project ) d
+                WHERE
+                    a.leader_id = b.id
+                  AND a.teacher_id = c.id
+                  AND a.project_id = d.id
+            ) e
+        <where>
+            <if test="id != null">e.id = #{id}</if>
+            <if test="name != null">and e.name = #{name}</if>
+            <if test="projectName != null">and e.project_name = #{projectName}</if>
+            <if test="leaderId != null">and e.leader_id = #{leaderId}</if>
+            <if test="leaderUsername != null">and e.leader_username = #{leaderUsername}</if>
+            <if test="leaderRealName != null">and e.leader_real_name = #{leaderRealName}</if>
+            <if test="committed != null">and e.COMMITTED = #{committed}</if>
+            <if test="teacherId != null">and e.teacher_id = #{teacherId}</if>
+            <if test="teacherName != null">and e.teacher_name = #{teacherName}</if>
+        </where>
+
+    </select>
+
 </mapper>

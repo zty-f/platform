@@ -28,6 +28,8 @@ public interface TeamMapper {
 
     List<TeamInfoMTQO> selectMTQOByPrimaryLimit(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
 
+    List<TeamInfoMTQO> selectMTQOQuery(TeamInfoMTQO teamInfoMTQO);
+
     String selectMemberIdsByPrimaryKey(Integer id);
 
     Integer selectTeacherIdByPrimaryKey(Integer id);

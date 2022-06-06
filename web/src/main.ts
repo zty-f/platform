@@ -1,4 +1,4 @@
-import { createApp } from "vue";
+import {createApp} from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
@@ -11,4 +11,4 @@ const app = createApp(App)
 app.use(ElementUI)
 app.use(store).use(router).mount("#app")
 //!!!!!!!!!!!!!!!!!👇👇👇👇👇👇👇👇👇
-axios.defaults.withCredentials=true
+axios.defaults.withCredentials = true

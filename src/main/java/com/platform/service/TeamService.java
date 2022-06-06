@@ -26,6 +26,8 @@ public interface TeamService {
 
     TeamInfoMTQO selectMTQOByPrimary(Integer id);
 
+    List<TeamInfoMTQO> selectMTQOQuery(TeamInfoMTQO teamInfoMTQO);
+
     String selectMemberIdsByPrimaryKey(Integer id);
 
     Integer selectTeacherIdByPrimaryKey(Integer id);

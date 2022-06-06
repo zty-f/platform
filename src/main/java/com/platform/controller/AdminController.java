@@ -65,14 +65,14 @@ public class AdminController extends BaseController {
             return RestResponse.fail(ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
         }
         if (adminSelected.getPassword().equals(admin.getPassword())) {
-            setCurrentUser(request, Const.ROLE_ADMIN.getMessage(), admin.getUsername(),adminSelected.getId());
+            setCurrentUser(request, Const.ROLE_ADMIN.getMessage(), admin.getUsername(), adminSelected.getId());
             return RestResponse.ok();
         }
         return RestResponse.fail(ResponseCode.AUTHENTICATION_FAIL.getCode(), ResponseCode.AUTHENTICATION_FAIL.getMessage());
     }
 
     @PostMapping("/api/admin/logout")
-    public RestResponse adminLogout(HttpServletRequest request){
+    public RestResponse adminLogout(HttpServletRequest request) {
         removeCurrentUser(request);
         return RestResponse.ok();
     }
@@ -105,14 +105,37 @@ public class AdminController extends BaseController {
         return RestResponse.ok(teamsInfoVO);
     }
 
+    @PostMapping("/api/admin/getTeamsQuery")
+    public RestResponse getTeamsQuery(@RequestBody TeamInfoMTQO teamInfoMTQO) {
+        System.out.println(teamInfoMTQO.toString());
+        List<TeamInfoMTQO> list = teamService.selectMTQOQuery(teamInfoMTQO);
+        List<TeamInfoVO> teamsInfoVO = list.stream().map(team -> {
+            TeamInfoVO teamInfoVO = MODEL_MAPPER.map(team, TeamInfoVO.class);
+            teamInfoVO.setMemberList(new LinkedList<>());
+            teamInfoVO.setProjectPath(null);
+            teamInfoVO.setIsLeader(false);
+            List<Integer> memberIdList = null;
+            try {
+                memberIdList = objectMapper.readValue(team.getMemberIds(), List.class);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            for (Integer id : memberIdList) {
+                teamInfoVO.getMemberList().add(new String[]{String.valueOf(id), studentService.selectRealNameByPrimaryKey(id)});
+            }
+            return teamInfoVO;
+        }).collect(Collectors.toList());
+        return RestResponse.ok(teamsInfoVO);
+    }
+
     @GetMapping("/api/admin/getTeamById/{id}")
     public RestResponse getTeamInfoById(@PathVariable Integer id) {
-        TeamInfoMTQO teamInfoVO =  teamService.selectMTQOByPrimary(id);
+        TeamInfoMTQO teamInfoVO = teamService.selectMTQOByPrimary(id);
         return RestResponse.ok(teamInfoVO);
     }
 
     @GetMapping("/api/admin/getStudents/{pageNum}/{pageSize}")
-    public RestResponse getStudents(@PathVariable Integer pageNum,@PathVariable Integer pageSize){
+    public RestResponse getStudents(@PathVariable Integer pageNum, @PathVariable Integer pageSize) {
         List<StudentVO> studentVOS = studentService.selectVOsLimit(pageNum * pageSize, pageSize);
         return RestResponse.ok(studentVOS);
     }
@@ -120,11 +143,12 @@ public class AdminController extends BaseController {
 
     /**
      * 根据ProjectId查询有关队伍的全部信息
+     *
      * @param id
      * @return
      */
     @GetMapping("/api/admin/getTeamByProjectId/{id}")
-    public RestResponse getTeamByProjectId(@PathVariable Integer id){
+    public RestResponse getTeamByProjectId(@PathVariable Integer id) {
 
         List<TeamAllInfoVO> list = teamService.getTeamByProjectId(id);
 

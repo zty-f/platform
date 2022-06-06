@@ -19,6 +19,7 @@ import {ElMessage} from "element-plus";
 import {reactive} from "vue";
 import {useRouter} from 'vue-router'
 
+//没这句还跳不过去
 const router = useRouter()
 
 
@@ -95,9 +96,9 @@ const ToUpdateTeamInfo = (row: Item) => {
   if (row.isLeader) {
     router.push({
       name: "updateTeamInfo",
-      // query: {
-      //   p1: 1
-      // }
+      query: {
+        teamId: row.id,
+      },
     });
   } else {
     alert("无权限");

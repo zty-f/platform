@@ -23,8 +23,14 @@
           <el-menu-item index="/createTeam"
                         v-show="identification.identification!==''&&identification.identification==='student'">创建队伍
           </el-menu-item>
-          <el-menu-item index="/admin/teamInfo" v-show="identification.identification==='admin'">admin队伍信息
-          </el-menu-item>
+          <el-sub-menu index="" v-show="identification.identification==='admin'">
+            <template #title>admin</template>
+            <el-menu-item index="/admin/teamInfo">队伍信息</el-menu-item>
+            <el-menu-item index="2-2">item two</el-menu-item>
+            <el-menu-item index="2-3">item three</el-menu-item>
+          </el-sub-menu>
+
+
           <el-menu-item index="/register" :style="{marginLeft:'900px'}" v-show="isShowLoginAndRegister">注册
           </el-menu-item>
           <el-menu-item index="/" @click="isShowLoginForm = true" v-show="isShowLoginAndRegister">登录</el-menu-item>
@@ -40,9 +46,9 @@
           <el-form :model="user" label-width="80px" ref="loginFormRef">
             <el-form-item label="角色">
               <el-select v-model="identification.identification" placeholder="请选择角色">
-                <el-option label="admin" value="admin"/>
-                <el-option label="teacher" value="teacher"/>
-                <el-option label="student" value="student"/>
+                <el-option label="admin" value="admin" />
+                <el-option label="teacher" value="teacher" />
+                <el-option label="student" value="student" />
               </el-select>
             </el-form-item>
             <el-form-item label="用户名" prop="username">
@@ -77,12 +83,12 @@
 
 <script lang="ts" setup>
 
-import {reactive, ref} from 'vue';
+import { reactive, ref } from 'vue';
 import axios from "axios";
-import {ElMessage, ElMessageBox} from 'element-plus';
-import type {FormInstance} from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus';
+import type { FormInstance } from 'element-plus'
 import router from "@/router";
-import {Component, Vue} from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 
 const loginFormRef = ref<FormInstance>()
 const isShowLoginForm = ref(false);
@@ -104,7 +110,7 @@ const created = () => {
   axios.get("/getCurrentUser", {withCredentials: true}).then((response) => {
     const data = response.data;
     console.log(data);
-    console.log("app.vue created:"+data.responseBody[0]);
+    console.log("app.vue created:" + data.responseBody[0]);
     if (data.code === 200) {
       isShowLoginAndRegister.value = false;
       isShowLogOut.value = true;

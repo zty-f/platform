@@ -1,16 +1,16 @@
 <template>
   <div>
     <el-table v-bind:data="tableData.list" style="width: 100%" @row-dblclick="ToUpdateTeamInfo">
-      <el-table-column prop="id" label="id" width="150"/>
-      <el-table-column prop="name" label="name" width="120"/>
-      <el-table-column prop="isLeader" label="isLeader" width="120"/>
-      <el-table-column prop="memberListStr" label="memberList" width="120"/>
-      <el-table-column prop="projectName" label="projectName" width="120"/>
-      <el-table-column prop="leaderRealName" label="leaderRealName" width="120"/>
-      <el-table-column prop="committed" label="committed" width="120"/>
-      <el-table-column prop="teacherId" label="teacherId" width="120"/>
-      <el-table-column prop="teacherName" label="teacherName" width="120"/>
-      <el-table-column prop="projectPath" label="projectPath" width="120"/>
+      <el-table-column prop="id" label="id" width="150" />
+      <el-table-column prop="name" label="name" width="120" />
+      <el-table-column prop="isLeader" label="isLeader" width="120" />
+      <el-table-column prop="memberListStr" label="memberList" width="120" />
+      <el-table-column prop="projectName" label="projectName" width="120" />
+      <el-table-column prop="leaderRealName" label="leaderRealName" width="120" />
+      <el-table-column prop="committed" label="committed" width="120" />
+      <el-table-column prop="teacherId" label="teacherId" width="120" />
+      <el-table-column prop="teacherName" label="teacherName" width="120" />
+      <el-table-column prop="projectPath" label="projectPath" width="120" />
     </el-table>
 
     <div>
@@ -59,12 +59,11 @@
 
 <script lang="ts" setup>
 import axios from "axios";
-import {ElMessage} from "element-plus";
-import {ref} from 'vue'
-import {reactive} from "vue";
-import {useRouter} from 'vue-router'
+import { ElMessage } from "element-plus";
+import { ref } from 'vue'
+import { reactive } from "vue";
+import router from "@/router"
 
-const router = useRouter()
 const idDelete = ref('')
 
 const tableData = reactive<{
@@ -107,17 +106,17 @@ interface Item {
 }
 
 const flushAll = () => {
-  tableData.list=[]
-  optionsDelete=[]
-  studentUsernameAdd.value=''
-  student.id=''
-  student.info=''
-  teacherUsernameUpdate.value=''
-  teacher.id=''
-  teacher.info=''
-  user.identification=''
-  user.username=''
-  user.id=''
+  tableData.list = []
+  optionsDelete = []
+  studentUsernameAdd.value = ''
+  student.id = ''
+  student.info = ''
+  teacherUsernameUpdate.value = ''
+  teacher.id = ''
+  teacher.info = ''
+  user.identification = ''
+  user.username = ''
+  user.id = ''
 }
 
 const writeDataIntoTable = (data: string | any[]) => {
@@ -173,7 +172,10 @@ const created = () => {
       user.identification = data.responseBody[0];
       user.username = data.responseBody[1];
       user.id = data.responseBody[2];
-      axios.get("/api/student/teamInfoById/" + 12, {withCredentials: true}).then((response) => {
+      let teamId = router.currentRoute.value.query.teamId;
+      console.log("teamId:"+teamId);
+      console.log("teamId:" + teamId)
+      axios.get("/api/student/teamInfoById/" + teamId, {withCredentials: true}).then((response) => {
         const data = response.data;
 
         if (data.code === 200) {
@@ -296,3 +298,4 @@ const test = () => {
 created();
 
 </script>
+
