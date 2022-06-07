@@ -150,6 +150,7 @@
             <if test="username !=null">AND e.username = #{username}</if>
             <if test="password !=null">AND e.password = #{password}</if>
             <if test="realName !=null">AND e.real_name = #{realName}</if>
+            <if test="tel !=null">AND e.tel = #{tel}</if>
             <if test="schoolName !=null">AND e.school_name = #{schoolName}</if>
         </where>
         LIMIT #{startIndex}

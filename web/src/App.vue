@@ -74,7 +74,7 @@
       </el-main>
 
       <el-footer>
-        版权所有ZTY 2022 SWPU
+        版权所有 2022 SWPU
       </el-footer>
 
     </el-container>

@@ -42,8 +42,8 @@
     <el-table-column prop="teamIds" label="teamIds" width="180" />
     <el-table-column prop="schoolName" label="schoolName" width="180px" />
     <el-table-column prop="tel" label="tel" width="180" />
-
   </el-table>
+  <el-pagination background layout="prev, pager, next" :total="1000" @current-change="getTeachers" />
 </template>
 
 <script lang="ts" setup>
@@ -77,7 +77,9 @@ let teacherQuery = reactive({
   password: null,
   realName: null,
   tel: null,
-  schoolName: null
+  schoolName: null,
+  startIndex: 0,
+  pageSize: 3
 })
 
 const writeDataIntoTable = (data: Teacher[]) => {
@@ -102,8 +104,12 @@ const writeDataIntoTable = (data: Teacher[]) => {
 const selectFreely = (pageNum: number) => {
   axios.get("http://localhost:8080/api/admin/getTeachers/" + (pageNum - 1) + "/" + 3).then((response) => {
     if (response.data.code === 200) {
-      ElMessage.success("成功");
-      writeDataIntoTable(response.data.responseBody);
+      if (response.data.responseBody.length > 0) {
+        ElMessage.success("成功")
+        writeDataIntoTable(response.data.responseBody);
+      } else {
+        ElMessage.error("暂无数据")
+      }
     } else {
       ElMessage.error("失败");
     }
@@ -111,16 +117,34 @@ const selectFreely = (pageNum: number) => {
 }
 
 const selectQuery = (pageNum: number) => {
-  axios.get("http://localhost:8080/api/admin/getTeachers/" + (pageNum - 1) + "/" + 3).then((response) => {
+  teacherQuery.startIndex = (pageNum - 1) * teacherQuery.pageSize;
+  axios.post("/api/admin/getTeachersQuery", teacherQuery).then((response) => {
     if (response.data.code === 200) {
-      ElMessage.success("成功");
-      writeDataIntoTable(response.data.responseBody);
+      if (response.data.responseBody.length > 0) {
+        ElMessage.success("成功")
+        writeDataIntoTable(response.data.responseBody);
+      } else {
+        ElMessage.error("暂无数据")
+      }
     } else {
       ElMessage.error("失败");
     }
   })
 }
 
+
+const getTeachers = (pageNum: number) => {
+  if (teacherQuery.id != null ||
+    teacherQuery.username != null ||
+    teacherQuery.password != null ||
+    teacherQuery.realName != null ||
+    teacherQuery.tel != null ||
+    teacherQuery.schoolName != null) {
+    selectQuery(pageNum)
+  } else {
+    selectFreely(pageNum);
+  }
+}
 
 const created = () => {
   selectFreely(1);

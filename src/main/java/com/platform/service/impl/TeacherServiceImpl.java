@@ -1,5 +1,6 @@
 package com.platform.service.impl;
 
+import com.platform.dto.TeacherDTO;
 import com.platform.entity.Teacher;
 import com.platform.mapper.TeacherMapper;
 import com.platform.service.TeacherService;
@@ -73,5 +74,10 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public List<TeacherVO> selectVOsLimit(Integer startIndex, Integer pageSize) {
         return teacherMapper.selectVOsLimit(startIndex, pageSize);
+    }
+
+    @Override
+    public List<TeacherVO> selectVOsQuery(TeacherDTO teacherDTO) {
+        return teacherMapper.selectVOsQuery(teacherDTO);
     }
 }

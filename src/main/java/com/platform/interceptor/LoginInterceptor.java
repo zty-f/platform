@@ -30,7 +30,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         System.out.println("preHandle....");
         String uri = request.getRequestURI();
-        System.out.println("当前路径" + uri);
+        System.out.println("当前路径:" + uri);
 
         /**
          * HandlerMethod=>Controller中标注@RequestMapping的方法
@@ -42,6 +42,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         String token = (String) httpSession.getAttribute("username");
         if (token == null) {
+            System.out.println("token == null");
             // 未登录跳转到登录界面
             response.getWriter().write(objectMapper.writeValueAsString(
                     RestResponse.fail(

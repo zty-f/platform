@@ -1,5 +1,6 @@
 package com.platform.service;
 
+import com.platform.dto.TeacherDTO;
 import com.platform.entity.Teacher;
 import com.platform.vo.TeacherVO;
 import org.apache.ibatis.annotations.Param;
@@ -32,4 +33,6 @@ public interface TeacherService {
     TeacherVO selectVOByUsername(String username);
 
     List<TeacherVO> selectVOsLimit(Integer startIndex, Integer pageSize);
+
+    List<TeacherVO> selectVOsQuery(TeacherDTO teacherDTO);
 }

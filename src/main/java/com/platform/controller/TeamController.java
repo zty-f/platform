@@ -16,9 +16,12 @@ import com.platform.service.TeamService;
 import com.platform.utils.JSONUtil;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.*;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author by Hchier
@@ -128,5 +131,19 @@ public class TeamController extends BaseController {
         return RestResponse.fail(ResponseCode.ADD_FAIL.getCode(), ResponseCode.ADD_FAIL.getMessage());
     }
 
-
+    @PostMapping("/uploadFile")
+    public RestResponse uploadFile(MultipartFile file, String teamId, HttpServletRequest request) throws IOException {
+        if (teamId == null || "".equals(teamId)) {
+            return RestResponse.fail(ResponseCode.PARAMS_NULL_OR_EMPTY.getCode(), ResponseCode.PARAMS_NULL_OR_EMPTY.getMessage());
+        }
+        Team team = teamService.selectByPrimaryKey(Integer.valueOf(teamId));
+        String[] currentUser = getCurrentUser(request);
+        if (!team.getLeaderId().equals(currentUser[2])) {
+            return RestResponse.fail(ResponseCode.IDENTITY_ERROR.getCode(), ResponseCode.IDENTITY_ERROR.getMessage());
+        }
+        String path = Const.PROJECT_PARENT_PATH.getMessage() + team.getId() + "." + Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[1];
+        file.transferTo(new File(path));
+        teamService.updateByPrimaryKey(team.setCommitted(true).setProjectPath(path));
+        return RestResponse.ok();
+    }
 }

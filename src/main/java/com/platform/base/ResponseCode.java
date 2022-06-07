@@ -19,7 +19,8 @@ public enum ResponseCode {
     ADD_FAIL(436, "新增失败"),
     SCHOOL_NOT_EXIST(436, "学校不存在"),
     IDENTITY_ERROR(437, "身份异常"),
-    PROJECT_NOT_EXIST(438,"项目不存在");
+    PROJECT_NOT_EXIST(438,"项目不存在"),
+    PARAMS_NULL_OR_EMPTY(439,"参数为null或空");
 
     int code;
     String message;

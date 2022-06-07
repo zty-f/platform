@@ -8,6 +8,7 @@ import com.platform.base.Const;
 import com.platform.base.ResponseCode;
 import com.platform.base.RestResponse;
 import com.platform.dto.StudentDTO;
+import com.platform.dto.TeacherDTO;
 import com.platform.entity.Admin;
 import com.platform.entity.Team;
 import com.platform.mtqo.TeamInfoMTQO;
@@ -94,7 +95,6 @@ public class AdminController extends BaseController {
         List<TeamInfoVO> teamsInfoVO = list.stream().map(team -> {
             TeamInfoVO teamInfoVO = MODEL_MAPPER.map(team, TeamInfoVO.class);
             teamInfoVO.setMemberList(new LinkedList<>());
-            teamInfoVO.setProjectPath(null);
             teamInfoVO.setIsLeader(false);
             List<Integer> memberIdList = null;
             try {
@@ -104,6 +104,11 @@ public class AdminController extends BaseController {
             }
             for (Integer id : memberIdList) {
                 teamInfoVO.getMemberList().add(new String[]{String.valueOf(id), studentService.selectRealNameByPrimaryKey(id)});
+            }
+            String projectPath = teamInfoVO.getProjectPath();
+            if (projectPath != null && !"".equals(projectPath)) {
+                String[] split = projectPath.split("\\\\");
+                teamInfoVO.setProjectPath(split[split.length - 1]);
             }
             return teamInfoVO;
         }).collect(Collectors.toList());
@@ -117,7 +122,6 @@ public class AdminController extends BaseController {
         List<TeamInfoVO> teamsInfoVO = list.stream().map(team -> {
             TeamInfoVO teamInfoVO = MODEL_MAPPER.map(team, TeamInfoVO.class);
             teamInfoVO.setMemberList(new LinkedList<>());
-            teamInfoVO.setProjectPath(null);
             teamInfoVO.setIsLeader(false);
             List<Integer> memberIdList = null;
             try {
@@ -127,6 +131,11 @@ public class AdminController extends BaseController {
             }
             for (Integer id : memberIdList) {
                 teamInfoVO.getMemberList().add(new String[]{String.valueOf(id), studentService.selectRealNameByPrimaryKey(id)});
+            }
+            String projectPath = teamInfoVO.getProjectPath();
+            if (projectPath != null && !"".equals(projectPath)) {
+                String[] split = projectPath.split("\\\\");
+                teamInfoVO.setProjectPath(split[split.length - 1]);
             }
             return teamInfoVO;
         }).collect(Collectors.toList());
@@ -167,6 +176,12 @@ public class AdminController extends BaseController {
     @GetMapping("/api/admin/getTeachers/{pageNum}/{pageSize}")
     public RestResponse getTeachers(@PathVariable Integer pageNum, @PathVariable Integer pageSize) {
         List<TeacherVO> teacherVOList = teacherService.selectVOsLimit(pageNum * pageSize, pageSize);
+        return RestResponse.ok(teacherVOList);
+    }
+
+    @PostMapping("/api/admin/getTeachersQuery")
+    public RestResponse getTeachersQuery(@RequestBody TeacherDTO teacherDTO){
+        List<TeacherVO> teacherVOList = teacherService.selectVOsQuery(teacherDTO);
         return RestResponse.ok(teacherVOList);
     }
 

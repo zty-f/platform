@@ -122,4 +122,28 @@
             LIMIT #{startIndex}
             , #{pageSize}
     </select>
+
+    <select id="selectVOsQuery" resultMap="TeacherVOBaseResultMap" parameterType="com.platform.dto.TeacherDTO">
+        SELECT a.id          id,
+               a.username    username,
+               a.PASSWORD    PASSWORD,
+               a.real_name   real_name,
+               a.team_ids    team_ids,
+               b.NAME        school_name,
+               a.tel         tel,
+               a.avatar_path avatar_path
+        FROM (SELECT * FROM teacher) a,
+             (SELECT * FROM school) b
+        <where>
+            a.school_id = b.id
+            <if test="id != null">and a.id = #{id}</if>
+            <if test="username != null">and a.username = #{username}</if>
+            <if test ="password != null">and a.PASSWORD =#{password}</if>
+            <if test = "realName !=null">and  a.real_name = #{realName}</if>
+            <if test="tel !=null"> and a.tel = #{tel}</if>
+             <if test="schoolName != null">and b.NAME = #{schoolName}</if>
+         </where>
+            LIMIT #{startIndex}
+            , #{pageSize}
+    </select>
 </mapper>

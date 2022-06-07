@@ -103,6 +103,11 @@ public class TeacherController extends BaseController {
             for (Integer studentId : memberIdList) {
                 teamInfoVO.getMemberList().add(new String[]{String.valueOf(studentId), studentService.selectRealNameByPrimaryKey(studentId)});
             }
+            String projectPath = teamInfoVO.getProjectPath();
+            if (projectPath != null && !"".equals(projectPath)) {
+                String[] split = projectPath.split("\\\\");
+                teamInfoVO.setProjectPath(split[split.length - 1]);
+            }
             teamsInfoVO.add(teamInfoVO);
         }
         return RestResponse.ok(teamsInfoVO);

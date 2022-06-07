@@ -21,6 +21,9 @@
     <el-form-item label="student realName" prop="realName">
       <el-input v-model="studentQuery.realName" placeholder="student realName" />
     </el-form-item>
+    <el-form-item label="student tel" prop="tel">
+      <el-input v-model="studentQuery.tel" placeholder="student tel" />
+    </el-form-item>
     <el-form-item label="schoolName" prop="schoolName">
       <el-input v-model="studentQuery.schoolName" placeholder="schoolName" />
     </el-form-item>
@@ -75,6 +78,7 @@ let studentQuery = reactive({
   password: null,
   realName: null,
   schoolName: null,
+  tel: null,
   startIndex: 0,
   pageSize: 3
 })
@@ -84,8 +88,12 @@ const selectQuery = (pageNum: number) => {
 
   axios.post("/api/admin/getStudentsQuery", studentQuery).then((response) => {
     if (response.data.code === 200) {
-      ElMessage.success("查询成功");
-      writeDataIntoTable(response.data.responseBody);
+      if (response.data.responseBody.length > 0) {
+        ElMessage.success("成功")
+        writeDataIntoTable(response.data.responseBody);
+      } else {
+        ElMessage.error("暂无数据")
+      }
     } else {
       ElMessage.error("查询失败");
     }
@@ -93,11 +101,14 @@ const selectQuery = (pageNum: number) => {
 }
 
 const selectFreely = (pageNum: number) => {
-
   axios.get("/api/admin/getStudents/" + (pageNum - 1) + "/" + 3).then((response) => {
     if (response.data.code === 200) {
-      ElMessage.success("ok");
-      writeDataIntoTable(response.data.responseBody);
+      if (response.data.responseBody.length > 0) {
+        ElMessage.success("成功")
+        writeDataIntoTable(response.data.responseBody);
+      } else {
+        ElMessage.error("暂无数据")
+      }
     } else {
       ElMessage.error("请求错误");
     }
@@ -110,6 +121,7 @@ const getStudents = (pageNum: number) => {
     studentQuery.username != null ||
     studentQuery.password != null ||
     studentQuery.realName != null ||
+    studentQuery.tel != null ||
     studentQuery.schoolName != null) {
     selectQuery(pageNum);
   } else {

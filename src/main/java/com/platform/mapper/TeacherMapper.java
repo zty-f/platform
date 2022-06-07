@@ -1,5 +1,6 @@
 package com.platform.mapper;
 
+import com.platform.dto.TeacherDTO;
 import com.platform.entity.Teacher;
 import com.platform.vo.StudentVO;
 import com.platform.vo.TeacherVO;
@@ -34,4 +35,6 @@ public interface TeacherMapper {
     TeacherVO selectVOByUsername(String username);
 
     List<TeacherVO> selectVOsLimit(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+
+    List<TeacherVO> selectVOsQuery(TeacherDTO teacherDTO);
 }
