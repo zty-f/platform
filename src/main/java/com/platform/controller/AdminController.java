@@ -7,14 +7,17 @@ import com.platform.base.BaseController;
 import com.platform.base.Const;
 import com.platform.base.ResponseCode;
 import com.platform.base.RestResponse;
+import com.platform.dto.StudentDTO;
 import com.platform.entity.Admin;
 import com.platform.entity.Team;
 import com.platform.mtqo.TeamInfoMTQO;
 import com.platform.service.AdminService;
 import com.platform.service.StudentService;
+import com.platform.service.TeacherService;
 import com.platform.service.TeamService;
 import com.platform.utils.JSONUtil;
 import com.platform.vo.StudentVO;
+import com.platform.vo.TeacherVO;
 import com.platform.vo.TeamAllInfoVO;
 import com.platform.vo.TeamInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +38,15 @@ public class AdminController extends BaseController {
     private TeamService teamService;
     private ObjectMapper objectMapper;
     private StudentService studentService;
+    private TeacherService teacherService;
 
     @Autowired
-    public void setAdminService(AdminService adminService, TeamService teamService, ObjectMapper objectMapper, StudentService studentService) {
+    public void setAdminService(AdminService adminService, TeamService teamService, ObjectMapper objectMapper, StudentService studentService, TeacherService teacherService) {
         this.adminService = adminService;
         this.teamService = teamService;
         this.objectMapper = objectMapper;
         this.studentService = studentService;
+        this.teacherService = teacherService;
     }
 
     @PostMapping("/api/admin/add")
@@ -140,6 +145,12 @@ public class AdminController extends BaseController {
         return RestResponse.ok(studentVOS);
     }
 
+    @PostMapping("/api/admin/getStudentsQuery")
+    public RestResponse getStudentsQuery(@RequestBody StudentDTO studentDTO) {
+        System.out.println(studentDTO.toString());
+        List<StudentVO> studentVOS = studentService.selectVOsQuery(studentDTO);
+        return RestResponse.ok(studentVOS);
+    }
 
     /**
      * 根据ProjectId查询有关队伍的全部信息
@@ -149,13 +160,15 @@ public class AdminController extends BaseController {
      */
     @GetMapping("/api/admin/getTeamByProjectId/{id}")
     public RestResponse getTeamByProjectId(@PathVariable Integer id) {
-
         List<TeamAllInfoVO> list = teamService.getTeamByProjectId(id);
-
-
         return RestResponse.ok(list);
     }
 
+    @GetMapping("/api/admin/getTeachers/{pageNum}/{pageSize}")
+    public RestResponse getTeachers(@PathVariable Integer pageNum, @PathVariable Integer pageSize) {
+        List<TeacherVO> teacherVOList = teacherService.selectVOsLimit(pageNum * pageSize, pageSize);
+        return RestResponse.ok(teacherVOList);
+    }
 
 }
 

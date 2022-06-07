@@ -26,8 +26,8 @@
           <el-sub-menu index="" v-show="identification.identification==='admin'">
             <template #title>admin</template>
             <el-menu-item index="/admin/teamInfo">队伍信息</el-menu-item>
-            <el-menu-item index="2-2">item two</el-menu-item>
-            <el-menu-item index="2-3">item three</el-menu-item>
+            <el-menu-item index="/admin/teacherInfo">教师信息</el-menu-item>
+            <el-menu-item index="/admin/studentInfo">学生信息</el-menu-item>
           </el-sub-menu>
 
 

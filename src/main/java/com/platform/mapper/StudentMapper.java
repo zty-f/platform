@@ -1,5 +1,6 @@
 package com.platform.mapper;
 
+import com.platform.dto.StudentDTO;
 import com.platform.entity.Student;
 import com.platform.vo.StudentVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -31,7 +32,9 @@ public interface StudentMapper {
 
     String selectRealNameByPrimaryKey(Integer id);
 
-    List<StudentVO> selectVOsLimit(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+    List<StudentVO> selectVOsLimit( Integer startIndex,  Integer pageSize);
+
+    List<StudentVO> selectVOsQuery(StudentDTO studentDTO);
 
     List<Student> selectStudentsByIds( String ids);
 }

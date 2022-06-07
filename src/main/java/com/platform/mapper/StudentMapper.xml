@@ -108,21 +108,51 @@
     </select>
 
     <select id="selectVOsLimit" parameterType="java.lang.Integer" resultMap="StudentVOResultMap">
-        SELECT
-            student.id id,
-            student.username,
-            student.PASSWORD,
-            student.real_name real_name,
-            school.`name` school_name,
-            student.team_ids team_ids,
-            student.tel tel,
-            student.avatar_path avatar_path
-        FROM
-            student
-                LEFT JOIN school ON student.school_id = school.id
-            LIMIT #{startIndex},#{pageSize}
+        SELECT student.id          id,
+               student.username,
+               student.PASSWORD,
+               student.real_name   real_name,
+               school.`name`       school_name,
+               student.team_ids    team_ids,
+               student.tel         tel,
+               student.avatar_path avatar_path
+        FROM student
+                 LEFT JOIN school ON student.school_id = school.id
+            LIMIT #{startIndex}
+           , #{pageSize}
     </select>
     <select id="selectStudentsByIds" resultType="com.platform.entity.Student">
-        SELECT * FROM student WHERE id IN ${ids}
+        SELECT *
+        FROM student
+        WHERE id IN ${ids}
+    </select>
+
+    <select id="selectVOsQuery" resultMap="StudentVOResultMap" parameterType="com.platform.vo.StudentVO">
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        student.id id,
+        student.username,
+        student.PASSWORD,
+        student.real_name real_name,
+        school.`name` school_name,
+        student.team_ids team_ids,
+        student.tel tel,
+        student.avatar_path avatar_path
+        FROM
+        student
+        LEFT JOIN school ON student.school_id = school.id
+        ) e
+        <where>
+            <if test="id !=null">e.id = #{id}</if>
+            <if test="username !=null">AND e.username = #{username}</if>
+            <if test="password !=null">AND e.password = #{password}</if>
+            <if test="realName !=null">AND e.real_name = #{realName}</if>
+            <if test="schoolName !=null">AND e.school_name = #{schoolName}</if>
+        </where>
+        LIMIT #{startIndex}
+        , #{pageSize}
     </select>
 </mapper>

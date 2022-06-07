@@ -1,10 +1,12 @@
-import {createRouter, createWebHistory,RouteRecordRaw} from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/login.vue'
 import Register from '../views/register.vue'
 import studentTeamInfo from '../views/student/teamInfo.vue'
 import teacherTeamInfo from '../views/student/teamInfo.vue'
 import adminTeamInfo from '../views/admin/teamInfo.vue'
+import adminStudentInfo from '../views/admin/studentInfo.vue'
+import adminTeacherInfo from '../views/admin/teacherInfo.vue'
 import teamInfo from '../views/teamInfo.vue'
 import updateTeamInfo from '../views/updateTeamInfo.vue'
 import createTeam from '../views/createTeam.vue'
@@ -34,6 +36,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/admin/teamInfo',
     name: 'adminTeamInfo',
     component: adminTeamInfo
+  },
+  {
+    path: '/admin/studentInfo',
+    name: 'adminStudentInfo',
+    component: adminStudentInfo
+  },
+  {
+    path: '/admin/teacherInfo',
+    name: 'adminTeacherInfo',
+    component: adminTeacherInfo
   },
   {
     path: '/teamInfo',

@@ -1,5 +1,6 @@
 package com.platform.service.impl;
 
+import com.platform.dto.StudentDTO;
 import com.platform.entity.Student;
 import com.platform.mapper.StudentMapper;
 import com.platform.service.StudentService;
@@ -51,6 +52,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<StudentVO> selectVOsQuery(StudentDTO studentDTO) {
+        return studentMapper.selectVOsQuery(studentDTO);
+    }
+
+
+    @Override
     public String selectPasswordByUsername(String username) {
         return studentMapper.selectPasswordByUsername(username);
     }
@@ -74,4 +81,6 @@ public class StudentServiceImpl implements StudentService {
     public List<StudentVO> selectVOsLimit(Integer startIndex, Integer pageSize) {
         return studentMapper.selectVOsLimit(startIndex, pageSize);
     }
+
+
 }

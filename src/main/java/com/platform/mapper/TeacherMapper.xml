@@ -95,19 +95,31 @@
         where username = #{username}
     </select>
     <select id="selectVOByUsername" resultMap="TeacherVOBaseResultMap" parameterType="java.lang.String">
-        SELECT
-            a.id id,
-            a.username username,
-            a.password password,
-            a.real_name real_name,
-            a.team_ids team_ids,
-            b.name school_name,
-            a.tel tel,
-            a.avatar_path avatar_path
-        FROM
-                ( SELECT * FROM teacher WHERE teacher.id = '1' ) a,
-                ( SELECT * FROM school ) b
-        WHERE
-            a.school_id = b.id
+        SELECT a.id          id,
+               a.username    username,
+               a.password    password,
+               a.real_name   real_name,
+               a.team_ids    team_ids,
+               b.name        school_name,
+               a.tel         tel,
+               a.avatar_path avatar_path
+        FROM (SELECT * FROM teacher WHERE teacher.id = '1') a,
+             (SELECT * FROM school) b
+        WHERE a.school_id = b.id
+    </select>
+    <select id="selectVOsLimit" parameterType="java.lang.Integer" resultMap="TeacherVOBaseResultMap">
+        SELECT a.id          id,
+               a.username    username,
+               a.PASSWORD    PASSWORD,
+               a.real_name   real_name,
+               a.team_ids    team_ids,
+               b.NAME        school_name,
+               a.tel         tel,
+               a.avatar_path avatar_path
+        FROM (SELECT * FROM teacher) a,
+             (SELECT * FROM school) b
+        WHERE a.school_id = b.id
+            LIMIT #{startIndex}
+            , #{pageSize}
     </select>
 </mapper>

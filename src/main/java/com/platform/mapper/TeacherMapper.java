@@ -1,8 +1,10 @@
 package com.platform.mapper;
 
 import com.platform.entity.Teacher;
+import com.platform.vo.StudentVO;
 import com.platform.vo.TeacherVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,4 +32,6 @@ public interface TeacherMapper {
     String selectTeamIdsByUsername(String username);
 
     TeacherVO selectVOByUsername(String username);
+
+    List<TeacherVO> selectVOsLimit(@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
 }

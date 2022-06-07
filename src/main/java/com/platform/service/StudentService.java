@@ -1,5 +1,6 @@
 package com.platform.service;
 
+import com.platform.dto.StudentDTO;
 import com.platform.entity.Student;
 import com.platform.vo.StudentVO;
 import org.apache.ibatis.annotations.Param;
@@ -22,6 +23,8 @@ public interface StudentService {
     int updateByPrimaryKey(Student record);
 
     StudentVO selectVOByUsername(String username);
+
+    List<StudentVO> selectVOsQuery(StudentDTO studentDTO);
 
     String selectPasswordByUsername(String username);
 

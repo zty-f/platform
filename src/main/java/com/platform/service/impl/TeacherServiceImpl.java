@@ -69,4 +69,9 @@ public class TeacherServiceImpl implements TeacherService {
     public TeacherVO selectVOByUsername(String username) {
         return teacherMapper.selectVOByUsername(username);
     }
+
+    @Override
+    public List<TeacherVO> selectVOsLimit(Integer startIndex, Integer pageSize) {
+        return teacherMapper.selectVOsLimit(startIndex, pageSize);
+    }
 }
