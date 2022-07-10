@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.platform.mapper.ScoreMapper">
+    <resultMap id="BaseResultMap" type="com.platform.entity.Score">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="team_id" jdbcType="INTEGER" property="teamId"/>
+        <result column="judge_id" jdbcType="INTEGER" property="judgeId"/>
+        <result column="score" jdbcType="REAL" property="score"/>
+    </resultMap>
+
+    <resultMap id="ScoreVOResultMap" type="com.platform.vo.ScoreVO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="team_id" jdbcType="INTEGER" property="teamId"/>
+        <result column="judge_id" jdbcType="INTEGER" property="judgeId"/>
+        <result column="score" jdbcType="REAL" property="score"/>
+        <result column="project_path" property="projectPath"/>
+    </resultMap>
+
+    <resultMap id="SummaryResultMap" type="com.platform.entity.Summary">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="team_id"  property="teamId"/>
+        <result column="score"  property="score"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from score
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.platform.entity.Score">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into score (team_id, judge_id, score
+        )
+        values (#{teamId,jdbcType=INTEGER}, #{judgeId,jdbcType=INTEGER}, #{score,jdbcType=REAL}
+        )
+    </insert>
+    <update id="updateScoreByPrimaryKey" parameterType="com.platform.entity.Score">
+        update score
+        set score = #{score,jdbcType=REAL}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select id, team_id, judge_id, score
+        from score
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, team_id, judge_id, score
+        from score
+    </select>
+
+    <insert id="insertDistributeList" parameterType="java.util.List">
+        insert into score(team_id, judge_id) values
+        <foreach collection="distributeList" open="" separator="," close="" item="item">
+            (#{item.teamId}, #{item.judgeId})
+        </foreach>
+    </insert>
+
+    <select id="selectByJudgeId" parameterType="java.lang.Integer" resultMap="ScoreVOResultMap">
+        SELECT score.id,
+               score.team_id,
+               score.judge_id,
+               score.score,
+               team.project_path
+        FROM score
+                 LEFT JOIN team ON score.team_id = team.id
+        WHERE score.judge_id = #{judgeId}
+    </select>
+
+    <select id="judgeOver" resultType="java.lang.Integer">
+        SELECT count(*) from score where isnull(score)
+    </select>
+
+    <select id="summarize" resultMap="SummaryResultMap">
+        SELECT
+            team_id, avg(score) as score
+        FROM
+            `score`
+        GROUP BY team_id
+    </select>
+</mapper>

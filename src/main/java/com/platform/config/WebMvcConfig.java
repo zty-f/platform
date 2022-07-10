@@ -19,6 +19,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/api/admin/login",
                         "/api/student/login",
                         "/api/teacher/login",
+                        "/api/judge/login",
                         "/api/admin/add",
                         "/api/student/register",
                         "/api/team/add",

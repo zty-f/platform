@@ -19,8 +19,12 @@ public enum ResponseCode {
     ADD_FAIL(436, "新增失败"),
     SCHOOL_NOT_EXIST(436, "学校不存在"),
     IDENTITY_ERROR(437, "身份异常"),
-    PROJECT_NOT_EXIST(438,"项目不存在"),
-    PARAMS_NULL_OR_EMPTY(439,"参数为null或空");
+    PROJECT_NOT_EXIST(438, "项目不存在"),
+    PARAMS_NULL_OR_EMPTY(439, "参数为null或空"),
+    DISTRIBUTE_JUDGE_FAIL(440, "评委分配失败"),
+    NO_DATA(441, "暂无数据"),
+    UPDATE_SCORE_FAIL(442, "更新分数失败"),
+    JUDGE_NOT_OVER(443,"未批改完");
 
     int code;
     String message;
@@ -33,9 +37,9 @@ public enum ResponseCode {
     @Override
     public String toString() {
         return "ResponseCode{" +
-                "code=" + code +
-                ", message='" + message + '\'' +
-                '}';
+            "code=" + code +
+            ", message='" + message + '\'' +
+            '}';
     }
 
     public int getCode() {

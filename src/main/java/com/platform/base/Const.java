@@ -13,6 +13,7 @@ public enum Const {
     ROLE_ADMIN("admin"),
     ROLE_STUDENT("student"),
     ROLE_TEACHER("teacher"),
+    ROLE_JUDGE("judge"),
     PROJECT_PARENT_PATH("D:\\nginx-1.18.0\\static\\platform\\");
 
     String message;

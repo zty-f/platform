@@ -1,5 +1,6 @@
 <template>
   <el-button type="primary" @click="changeStatusOfTableOfSelect">打开/关闭 查询单元</el-button>
+  <el-button type="primary" @click="distributeJudge">分配评委</el-button>
   <el-form
     :label-position="left"
     label-width="150px"
@@ -46,14 +47,14 @@
   <el-table :data="tableData" style="width: 100%">
     <el-table-column prop="id" label="队伍id" width="100" />
     <el-table-column prop="name" label="队伍name" width="100" />
-    <el-table-column prop="memberList" label="成员" width="180"/>
-    <el-table-column prop="projectName" label="所选项目" width="180"/>
+    <el-table-column prop="memberList" label="成员" width="180" />
+    <el-table-column prop="projectName" label="所选项目" width="180" />
     <el-table-column prop="leaderId" label="队长id" />
     <el-table-column prop="leaderUsername" label="队长username" width="180" />
-    <el-table-column prop="leaderRealName" label="队长realname" width="180"/>
+    <el-table-column prop="leaderRealName" label="队长realname" width="180" />
     <el-table-column prop="committed" label="提交状态" />
     <el-table-column prop="teacherId" label="辅导老师id" />
-    <el-table-column prop="teacherName" label="辅导老师name"  />
+    <el-table-column prop="teacherName" label="辅导老师name" />
     <el-table-column prop="projectPath" label="项目地址" />
     <el-table-column fixed="right" label="Operations" width="">
       <template #default="scope">
@@ -186,13 +187,22 @@ const selectQuery = () => {
   })
 }
 
+const distributeJudge = () => {
+  axios.get("/api/admin/distribute").then((res) => {
+    if (res.data.code == 200) {
+      ElMessage.success("分配成功");
+    } else {
+      ElMessage.error("分配失败");
+    }
+  })
+}
+
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.resetFields()
 }
 
 const downFile = (index: number) => {
-
   window.location.href = "http://localhost:8500/platform/" + tableData[index].projectPath;
 }
 

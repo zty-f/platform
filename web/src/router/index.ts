@@ -9,6 +9,9 @@ import teamInfo from '../views/teamInfo.vue'
 import updateTeamInfo from '../views/updateTeamInfo.vue'
 import createTeam from '../views/createTeam.vue'
 import uploadFile from '../views/student/uploadFile.vue'
+import teams from '@/views/judge/teams.vue';
+import summary from "@/views/summary.vue";
+
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -56,6 +59,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/student/uploadFile',
     name: 'uploadFile',
     component: uploadFile
+  },
+  {
+    path: '/judge/teams',
+    name: 'teams',
+    component: teams
+  },
+  {
+    path: '/summary',
+    name: 'summary',
+    component: summary
   },
 ]
 

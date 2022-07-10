@@ -2,7 +2,6 @@ package com.platform.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.platform.base.BaseController;
 import com.platform.base.Const;
 import com.platform.base.ResponseCode;
@@ -10,18 +9,12 @@ import com.platform.base.RestResponse;
 import com.platform.dto.StudentDTO;
 import com.platform.dto.TeacherDTO;
 import com.platform.entity.Admin;
-import com.platform.entity.Team;
 import com.platform.mtqo.TeamInfoMTQO;
-import com.platform.service.AdminService;
-import com.platform.service.StudentService;
-import com.platform.service.TeacherService;
-import com.platform.service.TeamService;
-import com.platform.utils.JSONUtil;
+import com.platform.service.*;
 import com.platform.vo.StudentVO;
 import com.platform.vo.TeacherVO;
 import com.platform.vo.TeamAllInfoVO;
 import com.platform.vo.TeamInfoVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,15 +33,17 @@ public class AdminController extends BaseController {
     private ObjectMapper objectMapper;
     private StudentService studentService;
     private TeacherService teacherService;
+    private ScoreService scoreService;
 
-    @Autowired
-    public void setAdminService(AdminService adminService, TeamService teamService, ObjectMapper objectMapper, StudentService studentService, TeacherService teacherService) {
+    public AdminController(AdminService adminService, TeamService teamService, ObjectMapper objectMapper, StudentService studentService, TeacherService teacherService, ScoreService scoreService) {
         this.adminService = adminService;
         this.teamService = teamService;
         this.objectMapper = objectMapper;
         this.studentService = studentService;
         this.teacherService = teacherService;
+        this.scoreService = scoreService;
     }
+
 
     @PostMapping("/api/admin/add")
     public RestResponse addAdmin(@RequestBody Admin admin) {
@@ -180,11 +175,26 @@ public class AdminController extends BaseController {
     }
 
     @PostMapping("/api/admin/getTeachersQuery")
-    public RestResponse getTeachersQuery(@RequestBody TeacherDTO teacherDTO){
+    public RestResponse getTeachersQuery(@RequestBody TeacherDTO teacherDTO) {
         List<TeacherVO> teacherVOList = teacherService.selectVOsQuery(teacherDTO);
         return RestResponse.ok(teacherVOList);
     }
 
+    @GetMapping("/api/admin/distribute")
+    public RestResponse distribute() {
+        return adminService.distribute() ?
+            RestResponse.ok() :
+            RestResponse.fail(ResponseCode.DISTRIBUTE_JUDGE_FAIL.getCode(), ResponseCode.DISTRIBUTE_JUDGE_FAIL.getMessage());
+    }
+
+    @GetMapping("/api/admin/summarize")
+    public RestResponse summarize() {
+        if (!scoreService.judgeOver()) {
+            return RestResponse.fail(ResponseCode.JUDGE_NOT_OVER.getCode(), ResponseCode.JUDGE_NOT_OVER.getMessage());
+        }
+        int summarize = adminService.summarize();
+        return RestResponse.ok();
+    }
 }
 
 //

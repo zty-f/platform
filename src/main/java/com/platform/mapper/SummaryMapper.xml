@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.platform.mapper.SummaryMapper">
+    <resultMap id="BaseResultMap" type="com.platform.entity.Summary">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="team_id" jdbcType="INTEGER" property="teamId"/>
+        <result column="score" jdbcType="REAL" property="score"/>
+    </resultMap>
+    <resultMap id="SummaryVOResultMap" type="com.platform.vo.SummaryVO">
+        <id column="id" property="id"/>
+        <result column="team_id"  property="teamId"/>
+        <result column="team_name"  property="teamName"/>
+        <result column="score"  property="score"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from summary
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.platform.entity.Summary">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into summary (team_id, score)
+        values (#{teamId,jdbcType=INTEGER}, #{score,jdbcType=REAL})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.platform.entity.Summary">
+        update summary
+        set team_id = #{teamId,jdbcType=INTEGER},
+            score   = #{score,jdbcType=REAL}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select id, team_id, score
+        from summary
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="SummaryVOResultMap">
+        SELECT
+            summary.id as id,team.id as team_id, team.`name` as team_name, summary.score as score
+        FROM
+            summary
+                left join team on summary.team_id = team.id
+        ORDER BY summary.score desc
+    </select>
+    <insert id="insertList">
+        insert into summary(team_id, score) values
+        <foreach collection="summaryList" item="item" open="" separator="," close="">
+            (#{item.teamId}, #{item.score})
+        </foreach>
+    </insert>
+</mapper>

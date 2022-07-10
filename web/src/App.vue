@@ -15,13 +15,22 @@
         >
           <el-menu-item index="0" disabled>操作中心</el-menu-item>
           <el-menu-item index="/">首页</el-menu-item>
+          <el-menu-item index="/summary">summary</el-menu-item>
           <!--          <el-menu-item index="/2">用户管理</el-menu-item>-->
           <!--          <el-menu-item index="/"></el-menu-item>-->
           <el-menu-item index="/teamInfo"
-                        v-show="identification.identification!=='' && identification.identification!=='admin'">队伍信息
+                        v-show="identification.identification!=='' &&
+                        ( identification.identification==='student' || identification.identification==='teacher')"
+          >
+            队伍信息
           </el-menu-item>
           <el-menu-item index="/createTeam"
-                        v-show="identification.identification!==''&&identification.identification==='student'">创建队伍
+                        v-show="identification.identification!=='' && identification.identification==='student' "
+          >
+            创建队伍
+          </el-menu-item>
+          <el-menu-item index="/judge/teams"
+                        v-show="identification.identification!==''&&identification.identification==='judge'">打分
           </el-menu-item>
           <el-sub-menu index="" v-show="identification.identification==='admin'">
             <template #title>admin</template>
@@ -49,6 +58,7 @@
                 <el-option label="admin" value="admin" />
                 <el-option label="teacher" value="teacher" />
                 <el-option label="student" value="student" />
+                <el-option label="judge" value="judge" />
               </el-select>
             </el-form-item>
             <el-form-item label="用户名" prop="username">

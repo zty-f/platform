@@ -20,4 +20,8 @@ public interface AdminService {
     int updateByPrimaryKey(Admin record);
 
     Admin selectByUsername(String username);
+
+    boolean distribute();
+
+    int summarize();
 }
