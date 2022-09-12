@@ -46,7 +46,8 @@
         }
       ]"
     >
-      <el-input v-model="dynamicValidateForm.projectId"/>
+      <el-input v-model="dynamicValidateForm.projectId" @blur="selectProjectTitleById(dynamicValidateForm.projectId)"/>
+      {{ dynamicValidateForm.projectInfo }}
     </el-form-item>
 
 
@@ -165,8 +166,8 @@ const addDomain = () => {
   dynamicValidateForm.domains.push({
     key: Date.now(),
     value: '',
-    info:'',
-    id:''
+    info: '',
+    id: ''
   })
 }
 const test = () => {
@@ -247,268 +248,19 @@ const selectTeacherByUsername = (username: string) => {
   }
   return
 }
+
+const selectProjectTitleById = (id: string) => {
+  if (dynamicValidateForm.projectId !== '') {
+    axios.get("/api/project/selectTitleById/" + id).then((res) => {
+      if (res.data.code === 200) {
+        dynamicValidateForm.projectInfo = res.data.responseBody;
+      } else {
+        dynamicValidateForm.projectInfo = "";
+        dynamicValidateForm.projectId = "";
+        ElMessage.error(res.data.message);
+      }
+    })
+  }
+}
+
 </script>
-
-<!--<template>-->
-<!--  <el-form-->
-<!--    ref="formRef"-->
-<!--    :model="dynamicValidateForm"-->
-<!--    label-width="120px"-->
-<!--    class="demo-dynamic"-->
-<!--  >-->
-<!--    <el-form-item-->
-<!--      prop="name"-->
-<!--      label="队伍name"-->
-<!--      :rules="[-->
-<!--        {-->
-<!--          required: true,-->
-<!--          message: '请输入队伍name',-->
-<!--          trigger: 'blur',-->
-<!--        }-->
-<!--      ]"-->
-<!--    >-->
-<!--      <el-input v-model="form.name"/>-->
-<!--    </el-form-item>-->
-
-<!--    <el-form-item-->
-<!--      v-for="(student, index) in form.memberList"-->
-<!--      :key="student.key"-->
-<!--      :label="'成员' + (index+1)+'的username'"-->
-<!--      :prop="'domains.' + index + '.value'"-->
-<!--      :rules="{-->
-<!--        required: true,-->
-<!--        message: '成员username不为null',-->
-<!--        trigger: 'blur',-->
-<!--      }"-->
-<!--    >-->
-<!--      <el-input v-model="student.value" @blur="selectStudentByUsername(student)"/>-->
-<!--      <el-button class="mt-2" @click.prevent="removeStudent(student)">Delete</el-button>-->
-<!--      {{ student.info }}-->
-<!--    </el-form-item>-->
-
-<!--    <el-form-item-->
-<!--      prop="projectId"-->
-<!--      label="项目id"-->
-<!--      :rules="[-->
-<!--        {-->
-<!--          required: true,-->
-<!--          message: '请输入项目id',-->
-<!--          trigger: 'blur',-->
-<!--        }-->
-<!--      ]"-->
-<!--    >-->
-<!--      <el-input v-model="form.projectId"/>-->
-<!--    </el-form-item>-->
-
-
-<!--    <el-form-item-->
-<!--      prop="teacherUsername"-->
-<!--      label="老师username"-->
-<!--      :rules="[-->
-<!--        {-->
-<!--          required: true,-->
-<!--          message: '请输入老师老师username',-->
-<!--          trigger: 'blur',-->
-<!--        }-->
-<!--      ]"-->
-<!--    >-->
-<!--      <el-input v-model="form.teacherUsername"-->
-<!--                @blur="selectTeacherByUsername(form.teacherUsername)"/>-->
-<!--      {{ form.teacherInfo }}-->
-<!--    </el-form-item>-->
-
-<!--    <el-form-item>-->
-<!--      <el-button type="primary" @click="submitForm(formRef)">创建队伍</el-button>-->
-<!--      <el-button @click="addDomain">新增队员</el-button>-->
-<!--      <el-button @click="resetForm(formRef)">Reset</el-button>-->
-<!--      <el-button @click="test()">test</el-button>-->
-<!--    </el-form-item>-->
-<!--  </el-form>-->
-<!--</template>-->
-
-<!--<script lang="ts" setup>-->
-<!--import {reactive, ref} from 'vue'-->
-<!--import type {FormInstance} from 'element-plus'-->
-<!--import axios from "axios";-->
-<!--import {ElMessage} from "element-plus";-->
-
-
-<!--const user = reactive({-->
-<!--  identification: '',-->
-<!--  username: '',-->
-<!--  id: '',-->
-<!--})-->
-
-<!--const created = () => {-->
-<!--  axios.get("/getCurrentUser", {withCredentials: true}).then((response) => {-->
-<!--    const data = response.data;-->
-<!--    console.log(data);-->
-<!--    if (data.code === 200) {-->
-<!--      ElMessage.success("您当前的身份为" + data.responseBody[0] + "，用户名" + data.responseBody[1] + "，id" + data.responseBody[2]);-->
-<!--      user.identification = data.responseBody[0];-->
-<!--      user.username = data.responseBody[1];-->
-<!--      user.id = data.responseBody[2];-->
-<!--      console.log(user.username);-->
-<!--    } else {-->
-<!--      ElMessage.error(data.message);-->
-<!--    }-->
-<!--  });-->
-<!--  return-->
-<!--}-->
-
-<!--created();-->
-
-
-<!--const formRef = ref<FormInstance>()-->
-<!--const form = reactive<{-->
-<!--  name: string-->
-<!--  memberList: StudentForAdd[]-->
-<!--  projectId: string-->
-<!--  leaderId: string-->
-<!--  teacherId: string-->
-<!--  teacherUsername: string-->
-<!--  teacherInfo: string-->
-<!--}>({-->
-<!--  name: '',-->
-<!--  memberList: [{-->
-<!--    key: 1,-->
-<!--    id: '',-->
-<!--    username: '',-->
-<!--    info: '',-->
-<!--  }],-->
-<!--  projectId: '',-->
-<!--  leaderId: '',-->
-<!--  teacherId: '',-->
-<!--  teacherUsername: '',-->
-<!--  teacherInfo: '',-->
-<!--})-->
-
-<!--const teamInfoToCommit = reactive<{-->
-<!--  name: string-->
-<!--  memberIdList: string[]-->
-<!--  projectId: string,-->
-<!--  leaderId: string,-->
-<!--  teacherId: string,-->
-<!--}>({-->
-<!--  name: '',-->
-<!--  memberIdList: [],-->
-<!--  projectId: '',-->
-<!--  leaderId: '',-->
-<!--  teacherId: '',-->
-<!--})-->
-
-<!--interface StudentForAdd {-->
-<!--  key: number-->
-<!--  id: string-->
-<!--  username: string-->
-<!--  info: string-->
-<!--}-->
-
-<!--const removeStudent = (item: StudentForAdd) => {-->
-<!--  const index = form.memberList.indexOf(item)-->
-<!--  if (index !== -1) {-->
-<!--    form.memberList.splice(index, 1)-->
-<!--  }-->
-<!--}-->
-
-<!--const addDomain = () => {-->
-<!--  form.memberList.push({-->
-<!--    key: Date.now(),-->
-<!--    id: '',-->
-<!--    username: '',-->
-<!--    info: ''-->
-<!--  })-->
-<!--}-->
-
-<!--const test = () => {-->
-<!--  teamInfoToCommit.name = form.name;-->
-<!--  console.log("length:" + form.memberList.length);-->
-<!--  teamInfoToCommit.memberIdList = [];-->
-<!--  for (let i = 0; i < form.memberList.length; i++) {-->
-<!--    if (form.memberList[i].id !== '') {-->
-<!--      teamInfoToCommit.memberIdList.push(form.memberList[i].id);-->
-<!--    }-->
-
-<!--  }-->
-<!--  teamInfoToCommit.projectId = form.projectId;-->
-<!--  teamInfoToCommit.leaderId = form.leaderId;-->
-<!--  teamInfoToCommit.teacherId = form.teacherId;-->
-<!--  console.log(teamInfoToCommit);-->
-<!--}-->
-
-<!--const submitForm = (formEl: FormInstance | undefined) => {-->
-<!--  teamInfoToCommit.name = form.name;-->
-<!--  console.log("length:" + form.memberList.length);-->
-<!--  teamInfoToCommit.memberIdList = [];-->
-<!--  for (let i = 0; i < form.memberList.length; i++) {-->
-<!--    if (form.memberList[i].id !== '') {-->
-<!--      teamInfoToCommit.memberIdList.push(form.memberList[i].id);-->
-<!--    }-->
-
-<!--  }-->
-<!--  teamInfoToCommit.projectId = form.projectId;-->
-<!--  teamInfoToCommit.leaderId = form.leaderId;-->
-<!--  teamInfoToCommit.teacherId = form.teacherId;-->
-
-
-<!--  axios.post("/api/team/add", teamInfoToCommit, {withCredentials: true}).then((response) => {-->
-<!--    const data = response.data;-->
-<!--    if (data.code === 200) {-->
-<!--      ElMessage.success(data.message);-->
-<!--    } else {-->
-<!--      ElMessage.error(data.message);-->
-<!--    }-->
-<!--  });-->
-<!--}-->
-
-<!--const resetForm = (formEl: FormInstance | undefined) => {-->
-<!--  if (!formEl) return-->
-<!--  formEl.resetFields()-->
-<!--}-->
-
-
-<!--const selectStudentByUsername = (item: StudentForAdd) => {-->
-<!--  console.log("进入selectStudentByUsername方法");-->
-<!--  if (item.username !== '') {-->
-<!--    console.log("执行selectStudentByUsername方法");-->
-<!--    axios.get("/api/student/getByUsername/" + item.username, {withCredentials: true}).then((response) => {-->
-<!--      const data = response.data;-->
-<!--      if (data.code === 200) {-->
-<!--        let info = data.responseBody.realName + " " + data.responseBody.schoolName;-->
-<!--        ElMessage.success(info);-->
-<!--        item.info = info;-->
-<!--        item.id = data.responseBody.id;-->
-<!--      } else {-->
-<!--        ElMessage.error(data.message);-->
-<!--        // removeDomain(item);-->
-<!--        item.id = '';-->
-<!--        item.info = '';-->
-<!--        item.username = '';-->
-<!--      }-->
-<!--    });-->
-<!--  }-->
-<!--  return-->
-<!--}-->
-
-<!--const selectTeacherByUsername = (username: string) => {-->
-<!--  if (form.teacherUsername !== '') {-->
-<!--    axios.get("/api/teacher/getByUsername/" + username, {withCredentials: true}).then((response) => {-->
-<!--      const data = response.data;-->
-<!--      if (data.code === 200) {-->
-<!--        let info = data.responseBody.realName + " " + data.responseBody.schoolName;-->
-<!--        form.teacherId = data.responseBody.id;-->
-<!--        form.teacherInfo = info;-->
-<!--      } else {-->
-<!--        ElMessage.error(data.message);-->
-<!--        form.teacherUsername = '';-->
-<!--        form.teacherInfo = '';-->
-
-<!--      }-->
-<!--    });-->
-<!--  } else {-->
-<!--    form.teacherInfo = '';-->
-<!--  }-->
-<!--  return-->
-<!--}-->
-
-<!--</script>-->

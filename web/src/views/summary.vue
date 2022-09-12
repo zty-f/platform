@@ -1,18 +1,18 @@
 <template>
   <el-table :data="summaryList" stripe style="width: 100%">
-    <el-table-column prop="id" label="id" width="180" />
-    <el-table-column prop="teamId" label="teamId" width="180" />
-    <el-table-column prop="teamName" label="teamName" width="180" />
-    <el-table-column prop="score" label="score" width="180" />
-    <el-table-column prop="lv" label="lv" width="180" />
+    <el-table-column prop="id" label="id" width="180"/>
+    <el-table-column prop="teamId" label="teamId" width="180"/>
+    <el-table-column prop="teamName" label="teamName" width="180"/>
+    <el-table-column prop="score" label="score" width="180"/>
+    <el-table-column prop="lv" label="lv" width="180"/>
   </el-table>
 </template>
 
 <script lang="ts">
-import { Vue, Options } from "vue-class-component";
-import { SummaryVO } from "@/interfaces/summary"
+import {Vue, Options} from "vue-class-component";
+import {SummaryVO} from "@/interfaces/summary"
 import axios from "axios";
-import { ElMessage } from "element-plus";
+import {ElMessage} from "element-plus";
 
 @Options({
   created() {
@@ -24,15 +24,15 @@ export default class summary extends Vue {
 
   getData() {
     axios.get("/api/summary/getAll").then((res) => {
-      if (res.data.code == 200) {
+      if (res.data.code == 200 && res.data.responseBody.length > 0) {
         ElMessage.success("成功");
         for (let i = 0; i < res.data.responseBody.length; i++) {
           let lv = "";
-          if (res.data.responseBody[i].score >= 95) {
+          if (res.data.responseBody[i].score >= 90) {
             lv = "一等";
-          } else if (85 <= res.data.responseBody[i].score && res.data.responseBody[i].score < 95) {
+          } else if (80 <= res.data.responseBody[i].score && res.data.responseBody[i].score < 90) {
             lv = "二等";
-          } else if (70 <= res.data.responseBody[i].score && res.data.responseBody[i].score < 85) {
+          } else if (70 <= res.data.responseBody[i].score && res.data.responseBody[i].score < 80) {
             lv = "三等";
           } else {
             lv = "没等";

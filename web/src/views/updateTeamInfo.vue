@@ -1,21 +1,21 @@
 <template>
   <div>
     <el-table v-bind:data="tableData.list" style="width: 100%" @row-dblclick="ToUpdateTeamInfo">
-      <el-table-column prop="id" label="id" width="150" />
-      <el-table-column prop="name" label="name" width="120" />
-      <el-table-column prop="isLeader" label="isLeader" width="120" />
-      <el-table-column prop="memberListStr" label="memberList" width="120" />
-      <el-table-column prop="projectName" label="projectName" width="120" />
-      <el-table-column prop="leaderRealName" label="leaderRealName" width="120" />
-      <el-table-column prop="committed" label="committed" width="120" />
-      <el-table-column prop="teacherId" label="teacherId" width="120" />
-      <el-table-column prop="teacherName" label="teacherName" width="120" />
-      <el-table-column prop="projectPath" label="projectPath" width="120" />
+      <el-table-column prop="id" label="id" width="150"/>
+      <el-table-column prop="name" label="name" width="120"/>
+      <el-table-column prop="isLeader" label="isLeader" width="120"/>
+      <el-table-column prop="memberListStr" label="memberList" width="120"/>
+      <el-table-column prop="projectName" label="projectName" width="120"/>
+      <el-table-column prop="leaderRealName" label="leaderRealName" width="120"/>
+      <el-table-column prop="committed" label="committed" width="120"/>
+      <el-table-column prop="teacherId" label="teacherId" width="120"/>
+      <el-table-column prop="teacherName" label="teacherName" width="120"/>
+      <el-table-column prop="projectPath" label="projectPath" width="120"/>
     </el-table>
 
-    <div>
-      <span>将学生</span>
-      <el-select v-model="idDelete" placeholder="Select">
+    <div style="margin-bottom: 10px">
+      <span>删除学生：</span>
+      <el-select style="width: 270px; margin-right: 18px" v-model="idDelete" placeholder="Select">
         <el-option
           v-for="item in optionsDelete"
           :key="item.value"
@@ -23,27 +23,28 @@
           :value="item.value"
         />
       </el-select>
-      <span>从队伍中删了。</span>
       <el-button type="danger" @click="deleteStudentFromTeam()">删除学生</el-button>
     </div>
 
-    <div>
-      <span>将学生</span>
+    <div style="margin-bottom: 10px">
+      <span>添加学生：</span>
       <el-input
+        style="width: 270px; margin-right: 18px"
         v-model="studentUsernameAdd"
         class="w-50 m-2"
         placeholder="请输入学生username（非realName）"
         :prefix-icon="Search"
         @blur="selectStudentByUsername"
       />
-      <span>加到队伍中</span>
+
       <el-button type="primary" @click="selectStudentByUsername">查找学生</el-button>
       <el-button type="primary" @click="addStudentToTeam">增加学生</el-button>
     </div>
 
-    <div>
-      <span>将老师改为为</span>
+    <div style="margin-bottom: 10px">
+      <span>更改老师：</span>
       <el-input
+        style="width: 270px; margin-right: 18px"
         v-model="teacherUsernameUpdate"
         class="w-50 m-2"
         placeholder="请输入老师username（非realName）"
@@ -53,15 +54,14 @@
       <el-button type="primary" @click="selectTeacherByUsername">查找老师</el-button>
       <el-button type="primary" @click="updateTeacherOfTeam">更改老师</el-button>
     </div>
-    <el-button @click="test">test</el-button>
   </div>
 </template>
 
 <script lang="ts" setup>
 import axios from "axios";
-import { ElMessage } from "element-plus";
-import { ref } from 'vue'
-import { reactive } from "vue";
+import {ElMessage} from "element-plus";
+import {ref} from 'vue'
+import {reactive} from "vue";
 import router from "@/router"
 
 const idDelete = ref('')
@@ -173,7 +173,7 @@ const created = () => {
       user.username = data.responseBody[1];
       user.id = data.responseBody[2];
       let teamId = router.currentRoute.value.query.teamId;
-      console.log("teamId:"+teamId);
+      console.log("teamId:" + teamId);
       console.log("teamId:" + teamId)
       axios.get("/api/student/teamInfoById/" + teamId, {withCredentials: true}).then((response) => {
         const data = response.data;

@@ -28,6 +28,9 @@ public class ProjectController extends BaseController {
     @GetMapping("/api/project/selectTitleById/{id}")
     public RestResponse selectTitleById(@PathVariable Integer id) {
         String name = projectService.selectNameById(id);
+        if (name == null) {
+            return RestResponse.fail(ResponseCode.PROJECT_NOT_EXIST.getCode(), ResponseCode.PROJECT_NOT_EXIST.getMessage());
+        }
         return RestResponse.ok(name);
     }
 
@@ -39,8 +42,9 @@ public class ProjectController extends BaseController {
         }
         return RestResponse.ok(project);
     }
+
     @GetMapping("/api/project/selectAll")
-    public RestResponse selectAll(){
+    public RestResponse selectAll() {
         List<Project> projectList = projectService.selectAll();
         if (projectList == null) {
             return RestResponse.fail(ResponseCode.PROJECT_NOT_EXIST.getCode(), ResponseCode.PROJECT_NOT_EXIST.getMessage());

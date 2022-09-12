@@ -70,7 +70,7 @@ public class AdminServiceImpl implements AdminService {
         List<Score> distributeList = new LinkedList<>();
 
         for (Team team : teamList) {
-            if (team.getProjectPath().isEmpty()) {
+            if (team.getProjectPath() == null || team.getProjectPath().isEmpty()) {
                 continue;
             }
             Set<Integer> set = new HashSet<>();

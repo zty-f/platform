@@ -107,7 +107,6 @@ const isShowLogOut = ref(false);
 
 const identification = reactive({
   identification: '',
-
 })
 
 const user = reactive({
